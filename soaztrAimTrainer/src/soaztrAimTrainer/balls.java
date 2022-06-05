@@ -15,8 +15,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage; 
          
 public class balls extends Application { 
-	 private static final double MAX_X = 1000;
-	 private static final double MAX_Y = 600;
+	 private static final int MAX_X = 1000;
+	 private static final int MAX_Y = 600;
 
 	  int clickCount = 0;
 	  private Random random;
