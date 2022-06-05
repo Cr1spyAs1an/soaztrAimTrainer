@@ -40,7 +40,7 @@ public class GUIAIMDriver extends Application {
         
         hbox.setAlignment(Pos.CENTER);
         vbox.setAlignment(Pos.CENTER);
-       
+       //Creates the scenes (or windows)
         Scene scene = new Scene(hbox, HEIGHT, WIDTH);
         Scene scene2 = new Scene(vbox, 1000, 1000);
         stage.setScene(scene); 
