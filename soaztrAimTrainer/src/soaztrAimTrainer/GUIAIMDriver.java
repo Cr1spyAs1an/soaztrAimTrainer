@@ -48,42 +48,43 @@ public class GUIAIMDriver extends Application {
         Button create = new Button("Create"); 
         create.setPrefSize(100, 50);
         
-        
+    	//Creation of buttons
+        createPlayer newPlayer = new createPlayer("Guest", 0);
+    	Label title = new Label("Welcome " + newPlayer.getName() + "!");
+    	Button gridshot = new Button("Gridshot");
+    	title.setFont(font);
+    	gridshot.setMinWidth(400);
+    	gridshot.setMinHeight(50);
+    	gridshot.setFont(buttonFont);
+    	Button tracking = new Button("Tracking");
+    	tracking.setMinWidth(400);
+    	tracking.setMinHeight(50);
+    	tracking.setFont(buttonFont);
+    	Button reactionTime = new Button("Reaction Time");
+    	reactionTime.setMinWidth(400);
+    	reactionTime.setMinHeight(50);
+    	reactionTime.setFont(buttonFont);
+    	
+
+    	vbox.getChildren().add(title);
+    	vbox.getChildren().addAll(gridshot, tracking, reactionTime);
         hbox.getChildren().add(label);
         hbox.getChildren().add(name);
         hbox.getChildren().add(create);
         
+        
+    	
         //On button press it creates a new player
         create.setOnAction(e -> { 
         	stage.setScene(scene2);
         	String playerName = name.getText();
         	if (playerName == "") {
         		playerName = "Guest";
-        	}
-        	createPlayer newPlayer = new createPlayer(playerName, 0);
-        	//remove later, prints the new player created
-        	System.out.println(newPlayer);
-        	Label title = new Label("Welcome " + playerName + "!");
-        	title.setFont(font);
-        	
-        	//Creation of buttons
-        	Button gridshot = new Button("Gridshot");
-        	gridshot.setMinWidth(400);
-        	gridshot.setMinHeight(50);
-        	gridshot.setFont(buttonFont);
-        	Button tracking = new Button("Tracking");
-        	tracking.setMinWidth(400);
-        	tracking.setMinHeight(50);
-        	tracking.setFont(buttonFont);
-        	Button reactionTime = new Button("Reaction Time");
-        	reactionTime.setMinWidth(400);
-        	reactionTime.setMinHeight(50);
-        	reactionTime.setFont(buttonFont);
-        	
-        	vbox.getChildren().add(title);
-        	vbox.getChildren().addAll(gridshot, tracking, reactionTime);
-        	       	       	       	        	        	        	       	
-        });       
+        	} else {
+        		title.setText("Welcome " + playerName + "!");
+        	}        	       	       	       	        	        	        	       	
+        });  
+       
         stage.show();
 	
 	}
