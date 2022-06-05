@@ -19,16 +19,11 @@ public class balls extends Application {
 	 private static final int MAX_Y = 600;
 
 	  int clickCount = 0;
-	  private Random random;
-
-	    @Override
-	    public void init() {
-	        random = new Random();
-	    }
-	    
+	  public Random random;	    
 	    
    @Override 
    public void start(Stage stage) {      
+	  random = new Random();
       //Drawing a Circle 
 	  Circle circle = new Circle(MAX_X / 2, MAX_Y / 2, 30);
       //Setting the position of the circle 
@@ -51,7 +46,7 @@ public class balls extends Application {
        
       //Creating the mouse event handler 
       EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() { 
-         @Override 
+         
          public void handle(MouseEvent e) { 
         	clickCount++;
             circle.setCenterX(random.nextInt((int) MAX_X));
