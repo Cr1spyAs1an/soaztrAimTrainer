@@ -42,9 +42,9 @@ public class GUIAIMDriver extends Application {
         vbox.setAlignment(Pos.CENTER);
        //Creates the scenes (or windows)
         Scene scene = new Scene(hbox, HEIGHT, WIDTH);
-        Scene scene2 = new Scene(vbox, 1000, 1000);
+        Scene scene2 = new Scene(vbox, 800, 800);
         stage.setScene(scene); 
-        Label label = new Label("Username:");
+        Label label = new Label("Player name:");
         Button create = new Button("Create"); 
         create.setPrefSize(100, 50);
         
@@ -82,43 +82,11 @@ public class GUIAIMDriver extends Application {
         	
         	vbox.getChildren().add(title);
         	vbox.getChildren().addAll(gridshot, tracking, reactionTime);
-        	
-        	
-        	
-        	
-        	
-        	
-        	
-        	
-        });
-        
-       
-        
-        
-        
-        
-        
+        	       	       	       	        	        	        	       	
+        });       
         stage.show();
-
-	
-	
-	
 	
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	public static void main(String[] args) {
 		launch(args);
