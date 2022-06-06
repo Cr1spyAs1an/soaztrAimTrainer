@@ -23,7 +23,8 @@ import java.io.FileWriter;
 public class GUIAIMDriver extends Application {
 	final int WIDTH = 400;
 	final int HEIGHT = 400;
-	
+	private static final int MAX_X = 1000;
+	private static final int MAX_Y = 600;
 	
 	@Override
 	public void start(Stage stage) throws Exception {
@@ -32,21 +33,27 @@ public class GUIAIMDriver extends Application {
 		Font buttonFont = new Font("Impact",24);
 		stage.setTitle("Create Profile");
 		
+		
 
         TextField name = new TextField();
+        name.setMaxWidth(150);
         
-        HBox hbox = new HBox(20);
+        VBox start = new VBox(20);
         VBox vbox = new VBox(20);
+        HBox hbox = new HBox(20);
         
-        hbox.setAlignment(Pos.CENTER);
+        start.setAlignment(Pos.CENTER);
         vbox.setAlignment(Pos.CENTER);
+        hbox.setAlignment(Pos.CENTER);
+        
        //Creates the scenes (or windows)
-        Scene scene = new Scene(hbox, HEIGHT, WIDTH);
+        Scene scene = new Scene(start, HEIGHT, WIDTH);
         Scene scene2 = new Scene(vbox, 800, 800);
         stage.setScene(scene); 
         Label label = new Label("Player name:");
         Button create = new Button("Create"); 
         create.setPrefSize(100, 50);
+        
         
     	//Creation of buttons
         createPlayer newPlayer = new createPlayer("Guest", 0);
@@ -68,9 +75,9 @@ public class GUIAIMDriver extends Application {
 
     	vbox.getChildren().add(title);
     	vbox.getChildren().addAll(gridshot, tracking, reactionTime);
-        hbox.getChildren().add(label);
-        hbox.getChildren().add(name);
-        hbox.getChildren().add(create);
+        start.getChildren().add(label);
+        start.getChildren().add(name);
+        start.getChildren().add(create);
         
         
     	
@@ -82,7 +89,8 @@ public class GUIAIMDriver extends Application {
         		playerName = "Guest";
         	} else {
         		title.setText("Welcome " + playerName + "!");
-        	}        	       	       	       	        	        	        	       	
+        	}      
+        	stage.setTitle("Select Gamemode");
         });  
        
         stage.show();
