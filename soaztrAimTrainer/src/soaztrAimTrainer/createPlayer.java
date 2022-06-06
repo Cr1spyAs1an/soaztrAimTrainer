@@ -16,6 +16,16 @@ public class createPlayer {
 	public int getScore() {
 		return score;
 	}
+	
+	public String setName(String setName) {
+		name = setName;
+		return setName;
+	}
+	
+	public int setScore(int score) {
+		score = score;
+		return score;
+	}
 	@Override 
 	
 	public String toString() {
