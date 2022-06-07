@@ -27,6 +27,7 @@ import java.io.FileWriter;
 import java.util.Random;
 
 public class GUIAIMDriver extends Application {
+	
 	final int WIDTH = 400;
 	final int HEIGHT = 400;
 	private static final int MAX_X = 1000;
@@ -34,15 +35,16 @@ public class GUIAIMDriver extends Application {
 	int clickCount = 0;
 	public Random randomPOS;
 	createPlayer newPlayer = new createPlayer("Guest", 0);
+	
 	@Override
 	public void start(Stage stage) throws Exception {
+		
 		//Thyana we can change this font dw lmao
-		Font font = new Font("Impact",48);
-		Font buttonFont = new Font("Impact",24);
+		Font font = new Font("Consolas", 40);
+		Font buttonFont = new Font("Consolas",24);
 		stage.setTitle("Create Profile");
 		
 		
-
         TextField name = new TextField();
         name.setMaxWidth(150);
         
@@ -59,12 +61,13 @@ public class GUIAIMDriver extends Application {
         Scene scene = new Scene(start, HEIGHT, WIDTH);
         Scene mainMenu = new Scene(vbox, 800, 800);
        
-        
         //Sets the scene to the create player screen
         stage.setScene(scene); 
         Label label = new Label("Player name:");
+        label.setFont(font);
         Button create = new Button("Create"); 
-        create.setPrefSize(100, 50);
+        create.setFont(buttonFont);
+        create.setPrefSize(150, 50);
         
          
         randomPOS = new Random();
@@ -81,18 +84,17 @@ public class GUIAIMDriver extends Application {
        
       
     	//Creation of buttons (main menu)
-        
     	Label title = new Label("Welcome " + newPlayer.getName() + "!");
-    	Button gridshot = new Button("Gridshot");
+    	Button gridshot = new Button("GRIDSHOT");
     	title.setFont(font);
     	gridshot.setMinWidth(400);
     	gridshot.setMinHeight(50);
     	gridshot.setFont(buttonFont);
-    	Button tracking = new Button("Tracking");
+    	Button tracking = new Button("TRACKING");
     	tracking.setMinWidth(400);
     	tracking.setMinHeight(50);
     	tracking.setFont(buttonFont);
-    	Button reactionTime = new Button("Reaction Time");
+    	Button reactionTime = new Button("REACTION TIME");
     	reactionTime.setMinWidth(400);
     	reactionTime.setMinHeight(50);
     	reactionTime.setFont(buttonFont);

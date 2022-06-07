@@ -22,8 +22,8 @@ public class createPlayer {
 		return setName;
 	}
 	
-	public int setScore(int score) {
-		score = score;
+	public int setScore(int setScore) {
+		score = setScore;
 		return score;
 	}
 	@Override 
