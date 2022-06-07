@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -41,9 +42,8 @@ public class GUIAIMDriver extends Application {
 		
 		//Thyana we can change this font dw lmao
 		Font font = new Font("Consolas", 40);
-		Font buttonFont = new Font("Consolas",24);
+		Font buttonFont = new Font("Consolas", 24);
 		stage.setTitle("Create Profile");
-		
 		
         TextField name = new TextField();
         name.setMaxWidth(150);
@@ -56,8 +56,7 @@ public class GUIAIMDriver extends Application {
         vbox.setAlignment(Pos.CENTER);
       
         
-        
-       //Creates the scenes (or windows)
+        //Creates the scenes (or windows)
         Scene scene = new Scene(start, HEIGHT, WIDTH);
         Scene mainMenu = new Scene(vbox, 800, 800);
        
@@ -69,7 +68,8 @@ public class GUIAIMDriver extends Application {
         create.setFont(buttonFont);
         create.setPrefSize(150, 50);
         
-         
+        
+        // 
         randomPOS = new Random();
   	  	Circle circle = new Circle(MAX_X / 2, MAX_Y / 2, 30);
   	  	Text text = new Text("Click on the circle to start the game"); 
@@ -77,12 +77,10 @@ public class GUIAIMDriver extends Application {
   	  	text.setY(250);
   	  	Group onScreen = new Group(circle, text); 
   	  	Scene gridShotScene = new Scene(onScreen, MAX_X, MAX_Y); 
+  	  	
   	  
   	  	
   	  	
-       
-       
-      
     	//Creation of buttons (main menu)
     	Label title = new Label("Welcome " + newPlayer.getName() + "!");
     	Button gridshot = new Button("GRIDSHOT");
@@ -99,19 +97,23 @@ public class GUIAIMDriver extends Application {
     	reactionTime.setMinHeight(50);
     	reactionTime.setFont(buttonFont);
     	
+    	
     	EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() { 
             public void handle(MouseEvent e) { 
            	clickCount++;
                circle.setCenterX(randomPOS.nextInt((int) MAX_X));
                circle.setCenterY(randomPOS.nextInt((int) MAX_Y));
                text.setX(10); 
-               text.setY(15);
+               text.setY(30);
                text.setText("Your current score is " + clickCount);
+               text.setFont(buttonFont);
 
             } 
          };  
+         
          circle.addEventFilter(MouseEvent.MOUSE_CLICKED, eventHandler);
-    	//Adding 
+    	
+        //Adding 
     	vbox.getChildren().add(title);
     	vbox.getChildren().addAll(gridshot, tracking, reactionTime);
         start.getChildren().add(label);
@@ -135,11 +137,7 @@ public class GUIAIMDriver extends Application {
        
         gridshot.setOnAction(e -> {
         	stage.setScene(gridShotScene);
-        	stage.setTitle(newPlayer.getName() + " | " + "Gridshot");
-        	
-        	
-        	
-        	
+        	stage.setTitle(newPlayer.getName() + " | " + "Gridshot");	
         });
         
         
