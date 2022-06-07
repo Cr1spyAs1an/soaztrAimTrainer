@@ -76,8 +76,10 @@ public class balls extends Application {
       stage.setScene(scene); 
          
       //Displaying the contents of the stage 
-      stage.show(); 
-   } 
+      stage.show();
+   }
+    
+      
    public static void main(String args[]){ 
       launch(args); 
    } 

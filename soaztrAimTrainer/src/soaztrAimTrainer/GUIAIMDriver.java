@@ -41,7 +41,7 @@ public class GUIAIMDriver extends Application {
 	public void start(Stage stage) throws Exception {
 		
 		//Thyana we can change this font dw lmao
-		Font font = new Font("Consolas", 40);
+		Font font = new Font("Consolas", 35);
 		Font buttonFont = new Font("Consolas", 24);
 		stage.setTitle("Create Profile");
 		
@@ -62,27 +62,33 @@ public class GUIAIMDriver extends Application {
        
         //Sets the scene to the create player screen
         stage.setScene(scene); 
-        Label label = new Label("Player name:");
+        Label label = new Label("Enter player name:");
         label.setFont(font);
         Button create = new Button("Create"); 
         create.setFont(buttonFont);
         create.setPrefSize(150, 50);
         
         
-        // 
+        // creating the gridshot scene 
         randomPOS = new Random();
   	  	Circle circle = new Circle(MAX_X / 2, MAX_Y / 2, 30);
+  	  	circle.setFill(Color.PURPLE);
   	  	Text text = new Text("Click on the circle to start the game"); 
   	  	text.setX(400);
   	  	text.setY(250);
+  	  	text.setFill(Color.WHITE);
   	  	Group onScreen = new Group(circle, text); 
   	  	Scene gridShotScene = new Scene(onScreen, MAX_X, MAX_Y); 
+  	  	gridShotScene.setFill(Color.BLACK);
+  	  	
+  	  	
   	  	
   	  
   	  	
   	  	
     	//Creation of buttons (main menu)
     	Label title = new Label("Welcome " + newPlayer.getName() + "!");
+    	title.setTextFill(Color.BLUEVIOLET);
     	Button gridshot = new Button("GRIDSHOT");
     	title.setFont(font);
     	gridshot.setMinWidth(400);
@@ -107,7 +113,7 @@ public class GUIAIMDriver extends Application {
                text.setY(30);
                text.setText("Your current score is " + clickCount);
                text.setFont(buttonFont);
-
+               text.setFill(Color.WHITE);
             } 
          };  
          
@@ -139,6 +145,7 @@ public class GUIAIMDriver extends Application {
         	stage.setScene(gridShotScene);
         	stage.setTitle(newPlayer.getName() + " | " + "Gridshot");	
         });
+        
         
         
         
