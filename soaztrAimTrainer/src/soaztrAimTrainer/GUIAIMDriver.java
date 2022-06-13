@@ -33,14 +33,15 @@ public class GUIAIMDriver extends Application {
 	final int HEIGHT = 400;
 	private static final int MAX_X = 1000;
 	private static final int MAX_Y = 600;
-	int clickCount = 0;
+	int clickCount = -1;
 	public Random randomPOS;
 	createPlayer newPlayer = new createPlayer("Guest", 0);
+	boolean hitTarget = false;
 	
 	@Override
 	public void start(Stage stage) throws Exception {
 		
-		//Thyana we can change this font dw lmao
+		// establishing fonts 
 		Font font = new Font("Consolas", 35);
 		Font buttonFont = new Font("Consolas", 24);
 		stage.setTitle("Create Profile");
@@ -59,6 +60,7 @@ public class GUIAIMDriver extends Application {
         //Creates the scenes (or windows)
         Scene scene = new Scene(start, HEIGHT, WIDTH);
         Scene mainMenu = new Scene(vbox, 800, 800);
+        
        
         //Sets the scene to the create player screen
         stage.setScene(scene); 
@@ -67,7 +69,6 @@ public class GUIAIMDriver extends Application {
         Button create = new Button("Create"); 
         create.setFont(buttonFont);
         create.setPrefSize(150, 50);
-        
         
         // creating the gridshot scene 
         randomPOS = new Random();
@@ -80,11 +81,6 @@ public class GUIAIMDriver extends Application {
   	  	Group onScreen = new Group(circle, text); 
   	  	Scene gridShotScene = new Scene(onScreen, MAX_X, MAX_Y); 
   	  	gridShotScene.setFill(Color.BLACK);
-  	  	
-  	  	
-  	  	
-  	  
-  	  	
   	  	
     	//Creation of buttons (main menu)
     	Label title = new Label("Welcome " + newPlayer.getName() + "!");
@@ -104,20 +100,39 @@ public class GUIAIMDriver extends Application {
     	reactionTime.setFont(buttonFont);
     	
     	
-    	EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() { 
+    	EventHandler<MouseEvent> circleEventHandler = new EventHandler<MouseEvent>() { 
             public void handle(MouseEvent e) { 
-           	clickCount++;
-               circle.setCenterX(randomPOS.nextInt((int) MAX_X));
-               circle.setCenterY(randomPOS.nextInt((int) MAX_Y));
-               text.setX(10); 
-               text.setY(30);
-               text.setText("Your current score is " + clickCount);
-               text.setFont(buttonFont);
-               text.setFill(Color.WHITE);
+            	
+        
+          			clickCount=clickCount+2;
+            		
+          		
+                text.setText("Your current score is " + clickCount);
             } 
          };  
+         circle.addEventFilter(MouseEvent.MOUSE_CLICKED, circleEventHandler);
          
-         circle.addEventFilter(MouseEvent.MOUSE_CLICKED, eventHandler);
+         EventHandler<MouseEvent> backgroundEventHandler = new EventHandler<MouseEvent>() {
+        	 public void handle(MouseEvent e) {
+        		if (clickCount > 0) {
+            		clickCount --;
+            		 
+            	}
+        		circle.setCenterX(randomPOS.nextInt((int) MAX_X));
+                circle.setCenterY(randomPOS.nextInt((int) MAX_Y));
+        		text.setText("Your current score is " + clickCount);
+        		text.setX(10); 
+                text.setY(30);
+                text.setFont(buttonFont);
+                text.setFill(Color.WHITE);
+     		
+        		
+        	 }	 
+        	
+         };
+         
+         gridShotScene.addEventFilter(MouseEvent.MOUSE_CLICKED, backgroundEventHandler);
+        
     	
         //Adding 
     	vbox.getChildren().add(title);
@@ -126,8 +141,6 @@ public class GUIAIMDriver extends Application {
         start.getChildren().add(name);
         start.getChildren().add(create);
         
-        
-    	
         //On button press it creates a new player
         create.setOnAction(e -> { 
         	stage.setScene(mainMenu);
@@ -139,6 +152,7 @@ public class GUIAIMDriver extends Application {
         		newPlayer.setName(playerName);
         	}      
         	stage.setTitle("Select Gamemode");
+        	mainMenu.setFill(Color.BLACK);
         });  
        
         gridshot.setOnAction(e -> {

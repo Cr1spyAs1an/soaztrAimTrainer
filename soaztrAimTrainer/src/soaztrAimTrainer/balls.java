@@ -15,21 +15,23 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage; 
          
 public class balls extends Application { 
-	 private static final int MAX_X = 1000;
-	 private static final int MAX_Y = 600;
+	 
+	private static final int MAX_X = 1000;
+	private static final int MAX_Y = 600;
 
-	  int clickCount = 0;
-	  public Random random;	    
+	int clickCount = 0;
+	public Random random;	    
 	    
    @Override 
    public void start(Stage stage) {      
 	  random = new Random();
-      //Drawing a Circle 
+      
+	  //Drawing a Circle 
 	  Circle circle = new Circle(MAX_X / 2, MAX_Y / 2, 30);
-      //Setting the position of the circle 
+      
+	  //Setting the position of the circle 
       circle.setCenterX(random.nextInt((int) MAX_X));
       circle.setCenterY(random.nextInt((int) MAX_Y));
-     
        
       //Setting the text 
       Text text = new Text("Click on the circle to start the game"); 
