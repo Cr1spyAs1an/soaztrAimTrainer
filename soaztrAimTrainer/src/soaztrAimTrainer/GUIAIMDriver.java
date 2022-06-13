@@ -101,15 +101,13 @@ public class GUIAIMDriver extends Application {
     	
     	
     	EventHandler<MouseEvent> circleEventHandler = new EventHandler<MouseEvent>() { 
-            public void handle(MouseEvent e) { 
-            	
-        
-          			clickCount=clickCount+2;
+            public void handle(MouseEvent e) { clickCount=clickCount+2;
             		
           		
                 text.setText("Your current score is " + clickCount);
             } 
          };  
+         
          circle.addEventFilter(MouseEvent.MOUSE_CLICKED, circleEventHandler);
          
          EventHandler<MouseEvent> backgroundEventHandler = new EventHandler<MouseEvent>() {
