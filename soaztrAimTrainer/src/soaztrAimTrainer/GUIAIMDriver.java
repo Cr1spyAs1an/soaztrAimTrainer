@@ -33,7 +33,7 @@ public class GUIAIMDriver extends Application {
 	final int HEIGHT = 400;
 	private static final int MAX_X = 1000;
 	private static final int MAX_Y = 600;
-	int clickCount = -1;
+	int clickCount = 0;
 	public Random randomPOS;
 	createPlayer newPlayer = new createPlayer("Guest", 0);
 	boolean hitTarget = false;
@@ -101,10 +101,15 @@ public class GUIAIMDriver extends Application {
     	
     	
     	EventHandler<MouseEvent> circleEventHandler = new EventHandler<MouseEvent>() { 
-            public void handle(MouseEvent e) { clickCount=clickCount+2;
-            		
-          		
-                text.setText("Your current score is " + clickCount);
+            public void handle(MouseEvent e) { 
+            	clickCount = clickCount + 2;
+            	if (clickCount < 0) {
+            		clickCount = 0;
+            		clickCount++;
+            	}
+               
+            	
+            	text.setText("Your current score is " + clickCount);
             } 
          };  
          
@@ -112,13 +117,17 @@ public class GUIAIMDriver extends Application {
          
          EventHandler<MouseEvent> backgroundEventHandler = new EventHandler<MouseEvent>() {
         	 public void handle(MouseEvent e) {
-        		if (clickCount > 0) {
-            		clickCount --;
-            		 
-            	}
+        		
+        		clickCount--;
+        		
+        		
         		circle.setCenterX(randomPOS.nextInt((int) MAX_X));
                 circle.setCenterY(randomPOS.nextInt((int) MAX_Y));
-        		text.setText("Your current score is " + clickCount);
+                if (clickCount < 0) {
+        		text.setText("Your current score is 0");
+                } else {
+                	text.setText("Your current score is " + clickCount);
+                }
         		text.setX(10); 
                 text.setY(30);
                 text.setFont(buttonFont);
