@@ -107,8 +107,6 @@ public class GUIAIMDriver extends Application {
             		clickCount = 0;
             		clickCount++;
             	}
-               
-            	
             	text.setText("Your current score is " + clickCount);
             } 
          };  
