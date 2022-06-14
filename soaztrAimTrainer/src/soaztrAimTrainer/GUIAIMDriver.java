@@ -102,7 +102,9 @@ public class GUIAIMDriver extends Application {
     	
     	EventHandler<MouseEvent> circleEventHandler = new EventHandler<MouseEvent>() { 
             public void handle(MouseEvent e) { 
+            	if (clickCount >= 0) {
             	clickCount = clickCount + 2;
+            	}
             	if (clickCount < 0) {
             		clickCount = 0;
             		clickCount++;
@@ -121,11 +123,13 @@ public class GUIAIMDriver extends Application {
         		
         		circle.setCenterX(randomPOS.nextInt((int) MAX_X));
                 circle.setCenterY(randomPOS.nextInt((int) MAX_Y));
+                
                 if (clickCount < 0) {
         		text.setText("Your current score is 0");
                 } else {
                 	text.setText("Your current score is " + clickCount);
                 }
+                
         		text.setX(10); 
                 text.setY(30);
                 text.setFont(buttonFont);
