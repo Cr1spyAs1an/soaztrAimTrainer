@@ -120,8 +120,19 @@ public class GUIAIMDriver extends Application {
             	 endTime = System.currentTimeMillis();
             	long totalTime = startTime - endTime;
             	// At 50 score, the program will print how long it took you to click 50 circles
-            	if (clickCount == 50) {
-            	System.out.println(TimeUnit.MILLISECONDS.toSeconds(totalTime));
+            	if (clickCount == 5) {
+            	long totalSec = TimeUnit.MILLISECONDS.toSeconds(totalTime);
+            	System.out.println(totalSec);
+            	newPlayer.setTime(totalSec);
+            	try {
+            	FileWriter myWriter = new FileWriter("gridshotHS.txt", true);
+            	myWriter.write( "\n Username: " + newPlayer.getName() + "|" + "Time: " + newPlayer.getTime() + " Seconds");
+            	myWriter.close();
+            	} catch (IOException d) {
+            		System.out.println("error");
+            		d.printStackTrace();
+            	}
+            	
             	}
             	
             } 
@@ -176,6 +187,7 @@ public class GUIAIMDriver extends Application {
         	}      
         	stage.setTitle("Select Gamemode");
         	mainMenu.setFill(Color.BLACK);
+        	
         });  
        
         gridshot.setOnAction(e -> {
