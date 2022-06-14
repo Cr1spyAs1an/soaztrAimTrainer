@@ -15,7 +15,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class testing extends Application {
+public class tracking extends Application {
 
 	private static final int MAX_X = 1000;
 	private static final int MAX_Y = 600;
