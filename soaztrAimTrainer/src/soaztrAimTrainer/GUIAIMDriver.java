@@ -34,6 +34,9 @@ public class GUIAIMDriver extends Application {
 	private static final int MAX_X = 1000;
 	private static final int MAX_Y = 600;
 	int clickCount = 0;
+	long startTime = 0;
+	long endTime = 0;
+		
 	public Random randomPOS;
 	createPlayer newPlayer = new createPlayer("Guest", 0);
 	boolean hitTarget = false;
@@ -110,6 +113,15 @@ public class GUIAIMDriver extends Application {
             		clickCount++;
             	}
             	text.setText("Your current score is " + clickCount);
+            	//work in progress
+            	 startTime = System.currentTimeMillis();
+            	
+            	 if (clickCount == 4) {
+            		 endTime = System.currentTimeMillis();
+            	 }
+            	 System.out.println(startTime - endTime);
+            	
+            	
             } 
          };  
          
@@ -174,6 +186,12 @@ public class GUIAIMDriver extends Application {
         
         stage.show();
 	
+	}
+	
+	public static void decreaseSize(Circle circle, int clickCount) {
+		if (clickCount % 10 == 0) {
+			circle.setRadius(circle.getRadius() - 5);
+		}
 	}
 	
 	public static void main(String[] args) {

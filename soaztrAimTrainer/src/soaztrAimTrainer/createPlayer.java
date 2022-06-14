@@ -2,11 +2,11 @@ package soaztrAimTrainer;
 
 public class createPlayer {
 	private String name;
-	private int score;
+	private int time;
 	
 	createPlayer(String pName, int pScore){
 		name = pName;
-		score = pScore;
+		time = pScore;
 	}
 	
 	public String getName() {
@@ -14,7 +14,7 @@ public class createPlayer {
 	}
 	
 	public int getScore() {
-		return score;
+		return time;
 	}
 	
 	public String setName(String setName) {
@@ -22,14 +22,11 @@ public class createPlayer {
 		return setName;
 	}
 	
-	public int setScore(int setScore) {
-		score = setScore;
-		return score;
-	}
+	
 	@Override 
 	
 	public String toString() {
-		return String.format("Name: %s, Score: %s", name, score);
+		return String.format("Name: %s, Time: %s", name, time);
 	}
 	
 	
