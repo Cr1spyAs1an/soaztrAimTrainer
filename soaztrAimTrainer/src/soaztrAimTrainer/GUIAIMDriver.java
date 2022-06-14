@@ -26,6 +26,7 @@ import javafx.event.EventHandler;
 import java.io.IOException;
 import java.io.FileWriter;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class GUIAIMDriver extends Application {
 	
@@ -113,14 +114,15 @@ public class GUIAIMDriver extends Application {
             		clickCount++;
             	}
             	text.setText("Your current score is " + clickCount);
-            	//work in progress
+            	
             	 startTime = System.currentTimeMillis();
-            	
-            	 if (clickCount == 4) {
-            		 endTime = System.currentTimeMillis();
-            	 }
-            	 System.out.println(startTime - endTime);
-            	
+            	if (clickCount == 1)
+            	 endTime = System.currentTimeMillis();
+            	long totalTime = startTime - endTime;
+            	// At 50 score, the program will print how long it took you to click 50 circles
+            	if (clickCount == 50) {
+            	System.out.println(TimeUnit.MILLISECONDS.toSeconds(totalTime));
+            	}
             	
             } 
          };  
