@@ -110,6 +110,8 @@ public class GUIAIMDriver extends Application {
             		clickCount++;
             	}
             	text.setText("Your current score is " + clickCount);
+            	
+            	decreaseSize(circle, clickCount);
             } 
          };  
          
@@ -174,6 +176,12 @@ public class GUIAIMDriver extends Application {
         
         stage.show();
 	
+	}
+	
+	public static void decreaseSize(Circle circle, int clickCount) {
+		if (clickCount % 10 == 0) {
+			circle.setRadius(circle.getRadius() - 5);
+		}
 	}
 	
 	public static void main(String[] args) {
