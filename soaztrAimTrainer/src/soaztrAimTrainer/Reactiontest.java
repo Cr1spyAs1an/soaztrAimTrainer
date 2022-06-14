@@ -11,7 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage; 
 
 public class Reactiontest extends Application {
-	int thing = 13;
+	double studd = 0.0;
 	public Random random;
 	
 	@Override
