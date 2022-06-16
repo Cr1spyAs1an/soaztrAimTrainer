@@ -39,7 +39,7 @@ public class GUIAIMDriver extends Application {
 	long endTime = 0;
 		
 	public Random randomPOS;
-	createPlayer newPlayer = new createPlayer("Guest", 0);
+	createPlayer newPlayer = new createPlayer("Guest", 0, "NA");
 	boolean hitTarget = false;
 	
 	@Override
@@ -55,16 +55,17 @@ public class GUIAIMDriver extends Application {
         
         VBox start = new VBox(20);
         VBox vbox = new VBox(20);
-        VBox vbox2 = new VBox(20);
+        VBox difficulty = new VBox(20);
         
+        //Center the vbox's
         start.setAlignment(Pos.CENTER);
         vbox.setAlignment(Pos.CENTER);
-      
+        difficulty.setAlignment(Pos.CENTER);
         
         //Creates the scenes (or windows)
         Scene scene = new Scene(start, HEIGHT, WIDTH);
         Scene mainMenu = new Scene(vbox, 800, 800);
-        
+        Scene difficultyGrid = new Scene(difficulty, HEIGHT, WIDTH);
        
         //Sets the scene to the create player screen
         stage.setScene(scene); 
@@ -73,6 +74,19 @@ public class GUIAIMDriver extends Application {
         Button create = new Button("Create"); 
         create.setFont(buttonFont);
         create.setPrefSize(150, 50);
+      
+        //Creates difficulty screen
+        Label diff = new Label("Select a difficulty");
+        diff.setFont(font);
+        Button easy = new Button("Easy"); 
+        Button medium = new Button("Medium"); 
+        Button hard = new Button("Hard"); 
+        easy.setFont(buttonFont);
+        easy.setPrefSize(150, 50);
+        medium.setFont(buttonFont);
+        medium.setPrefSize(150, 50);
+        hard.setFont(buttonFont);
+        hard.setPrefSize(150, 50);
         
         // creating the gridshot scene 
         randomPOS = new Random();
@@ -126,7 +140,7 @@ public class GUIAIMDriver extends Application {
             	newPlayer.setTime(totalSec);
             	try {
             	FileWriter myWriter = new FileWriter("gridshotHS.txt", true);
-            	myWriter.write( "\n Username: " + newPlayer.getName() + "|" + "Time: " + newPlayer.getTime() + " Seconds");
+            	myWriter.write( "\n Username: " + newPlayer.getName() + " | " + "Time: " + newPlayer.getTime() + " Seconds" + " | Difficulty: " + newPlayer.getDiff());
             	myWriter.close();
             	} catch (IOException d) {
             		System.out.println("error");
@@ -169,11 +183,10 @@ public class GUIAIMDriver extends Application {
         
     	
         //Adding 
-    	vbox.getChildren().add(title);
-    	vbox.getChildren().addAll(gridshot, tracking, reactionTime);
-        start.getChildren().add(label);
-        start.getChildren().add(name);
-        start.getChildren().add(create);
+    	
+    	vbox.getChildren().addAll(title, gridshot, tracking, reactionTime);
+        start.getChildren().addAll(label, name, create);
+        difficulty.getChildren().addAll(diff, easy, medium, hard);
         
         //On button press it creates a new player
         create.setOnAction(e -> { 
@@ -187,12 +200,32 @@ public class GUIAIMDriver extends Application {
         	}      
         	stage.setTitle("Select Gamemode");
         	mainMenu.setFill(Color.BLACK);
+        	System.out.println(newPlayer);
         	
         });  
        
         gridshot.setOnAction(e -> {
+        	stage.setScene(difficultyGrid);
+        });
+
+        easy.setOnAction(e -> {
         	stage.setScene(gridShotScene);
-        	stage.setTitle(newPlayer.getName() + " | " + "Gridshot");	
+        	stage.setTitle(newPlayer.getName() + " | " + "Gridshot" + " | " + "Easy");	
+        	newPlayer.setDiff("Easy");
+        });
+        
+        medium.setOnAction(e -> {
+        	stage.setScene(gridShotScene);
+        	stage.setTitle(newPlayer.getName() + " | " + "Gridshot" + " | " + "Medium");
+        	circle.setRadius(25);
+        	newPlayer.setDiff("Medium");
+        });
+        
+        hard.setOnAction(e -> {
+        	stage.setScene(gridShotScene);
+        	stage.setTitle(newPlayer.getName() + " | " + "Gridshot" + " | " + "Hard");
+        	circle.setRadius(10);
+        	newPlayer.setDiff("Hard");
         });
         
         

@@ -1,5 +1,7 @@
 
- Username: Guest|Time: 2
- Username: mathew|Time: 2 Seconds
- Username: Mathew|Time: 2 Seconds
- Username: Guest|Time: 8 Seconds
+ Username: John | Time: 2 Seconds | Difficulty: Easy
+ Username: Christopher | Time: 2 Seconds | Difficulty: Medium
+ Username: Alex | Time: 3 Seconds | Difficulty: Hard
+ Username: Guest | Time: 3 Seconds | Difficulty: Hard
+ Username: Guest | Time: 2 Seconds | Difficulty: Medium
+ Username: Guest | Time: 3 Seconds | Difficulty: Hard

@@ -3,10 +3,14 @@ package soaztrAimTrainer;
 public class createPlayer {
 	private String name;
 	private long time;
+	private String difficulty;
+
 	
-	createPlayer(String pName, int pScore){
+	createPlayer(String pName, int pScore, String pDifficulty){
 		name = pName;
 		time = pScore;
+		difficulty = pDifficulty;
+		
 	}
 	
 	public String getName() {
@@ -27,11 +31,21 @@ public class createPlayer {
 		return setTime;
 	}
 	
+	public String getDiff() {
+		return difficulty;
+	}
+	
+	public String setDiff(String setDiff) {
+		difficulty = setDiff;
+		return setDiff;
+	}
+	
+	
 	
 	@Override 
 	
 	public String toString() {
-		return String.format("Name: %s | Time: %s", name, time);
+		return String.format("Name: %s | Time: %s | Difficulty: %s", name, time, difficulty);
 	}
 	
 	
