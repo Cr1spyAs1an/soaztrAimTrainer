@@ -52,7 +52,7 @@ public class GUIAIMDriver extends Application {
 		
         TextField name = new TextField();
         name.setMaxWidth(150);
-        
+        //Creating vbox
         VBox start = new VBox(20);
         VBox vbox = new VBox(20);
         VBox difficulty = new VBox(20);
