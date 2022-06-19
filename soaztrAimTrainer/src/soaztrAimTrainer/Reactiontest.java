@@ -20,7 +20,7 @@ public class Reactiontest extends Application {
 	int click = 0;
 	@Override
 	public void start(Stage stage) throws Exception {
-		stage.setTitle("Hello World");
+		stage.setTitle("Reaction Time");
 	    Text text = new Text("After clicking start the background colour will change, try to click it as fast as you can"); 
 	    text.setFont(Font.font(null, FontWeight.BOLD, 15));    
 	    text.setFill(Color.BLACK);
