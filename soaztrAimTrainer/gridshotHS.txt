@@ -8,3 +8,5 @@
  Username: Guest | Time: 3 Seconds | Difficulty: Medium
  Username: Guest | Time: 5 Seconds | Difficulty: Hard
  Username: Sesf | Time: 5 Seconds | Difficulty: Hard
+ Username: Guest | Time: 6 Seconds | Difficulty: Hard
+ Username: Guest | Time: 3 Seconds | Difficulty: Medium

@@ -26,7 +26,10 @@ import javafx.event.EventHandler;
 import java.io.IOException;
 import java.io.FileWriter;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
+import javafx.scene.shape.Rectangle;
 
 public class GUIAIMDriver extends Application {
 	
@@ -35,19 +38,28 @@ public class GUIAIMDriver extends Application {
 	private static final int MAX_X = 1000;
 	private static final int MAX_Y = 600;
 	int clickCount = 0;
-	long startTime = 0;
-	long endTime = 0;
-		
+	long startTimeGrid = 0;
+	long endTimeGrid = 0;
+	long startTimeReact = 0;
+	long endTimeReact = 0;
+	int secondsPassed = 0;
+	boolean stopTimer = false;
 	public Random randomPOS;
 	createPlayer newPlayer = new createPlayer("Guest", 0, "NA");
 	boolean hitTarget = false;
 	
+	
 	@Override
 	public void start(Stage stage) throws Exception {
+		
+		
+		
+		
 		
 		// establishing fonts 
 		Font font = new Font("Consolas", 35);
 		Font buttonFont = new Font("Consolas", 24);
+		Font reactFont = new Font("Consolas", 20);
 		stage.setTitle("Create Profile");
 		
         TextField name = new TextField();
@@ -100,22 +112,60 @@ public class GUIAIMDriver extends Application {
   	  	Group onScreen = new Group(circle, text); 
   	  	Scene gridShotScene = new Scene(onScreen, MAX_X, MAX_Y); 
   	  	gridShotScene.setFill(Color.BLACK);
+  	 // Timer stuff
+  	  	Random randomNum = new Random();
+		int randomSec = 1 + randomNum.nextInt(5);
+		
+		
+  	  	// creating reaction timer scene
+  	  	Text reactTitle = new Text("After clicking start the background colour will change, try to click it as fast as you can\"");
+  	  	reactTitle.setX(50);
+  	  	reactTitle.setY(50);
+  	  	reactTitle.setFont(reactFont);
+  	  	Button startReact = new Button("Start");
+  	  	startReact.setMinSize(150,50);
+  	  	startReact.setLayoutX(475);
+  	  	startReact.setLayoutY(350);
+  	  	Rectangle rec = new Rectangle(0,0,1100,800);
+  	  	Group reactGroup = new Group(reactTitle, startReact, rec);
+  	  	Scene reactionScene = new Scene(reactGroup, 1100, 800);
+  	  	rec.setVisible(false);
+  	  	rec.setFill(Color.GREEN);
+  	 //Starts timer 
+  	  startReact.setOnAction(e -> {
+  		Timer timer = new Timer();
+		TimerTask task = new TimerTask() {
+			public void run() {
+				if (!stopTimer) {
+				if (randomSec == secondsPassed) {
+					stopTimer = true;
+					rec.setVisible(true);
+					startTimeReact = System.currentTimeMillis();
+					
+				}
+				secondsPassed++;
+				System.out.println(secondsPassed);
+				}
+			}
+		};
+  		 timer.scheduleAtFixedRate(task,1000,1000);
+  		System.out.println(randomSec);
+  		startReact.setVisible(false);
+  		
+  	   });
   	  	
     	//Creation of buttons (main menu)
     	Label title = new Label("Welcome " + newPlayer.getName() + "!");
     	title.setTextFill(Color.BLUEVIOLET);
     	Button gridshot = new Button("GRIDSHOT");
     	title.setFont(font);
-    	gridshot.setMinWidth(400);
-    	gridshot.setMinHeight(50);
+    	gridshot.setMinSize(400,50);
     	gridshot.setFont(buttonFont);
     	Button tracking = new Button("TRACKING");
-    	tracking.setMinWidth(400);
-    	tracking.setMinHeight(50);
+    	tracking.setMinSize(400,50);
     	tracking.setFont(buttonFont);
     	Button reactionTime = new Button("REACTION TIME");
-    	reactionTime.setMinWidth(400);
-    	reactionTime.setMinHeight(50);
+    	reactionTime.setMinSize(400,50);
     	reactionTime.setFont(buttonFont);
     	
     	
@@ -130,10 +180,10 @@ public class GUIAIMDriver extends Application {
             	}
             	text.setText("Your current score is " + clickCount);
             	
-            	 startTime = System.currentTimeMillis();
+            	 startTimeGrid = System.currentTimeMillis();
             	if (clickCount == 1)
-            	 endTime = System.currentTimeMillis();
-            	long totalTime = startTime - endTime;
+            	 endTimeGrid = System.currentTimeMillis();
+            	long totalTime = startTimeGrid - endTimeGrid;
             	// At 50 score, the program will print how long it took you to click 50 circles
             	if (clickCount == 5) {
             	long totalSec = TimeUnit.MILLISECONDS.toSeconds(totalTime);
@@ -159,8 +209,7 @@ public class GUIAIMDriver extends Application {
         	 public void handle(MouseEvent e) {
         		
         		clickCount--;
-        		
-        		
+        	
         		circle.setCenterX(randomPOS.nextInt((int) MAX_X));
                 circle.setCenterY(randomPOS.nextInt((int) MAX_Y));
                 
@@ -181,13 +230,26 @@ public class GUIAIMDriver extends Application {
          };
          
          gridShotScene.addEventFilter(MouseEvent.MOUSE_CLICKED, backgroundEventHandler);
-        
-    	
+         
+         EventHandler<MouseEvent> reactionEventHandler = new EventHandler<MouseEvent>() {
+        	 public void handle(MouseEvent e) {
+        		if (stopTimer = true) {
+        			endTimeReact = System.currentTimeMillis();
+        			System.out.println(endTimeReact - startTimeReact + "ms");
+        			
+        		}
+        		
+        	 }	 
+         };
+         
+         rec.addEventFilter(MouseEvent.MOUSE_CLICKED, reactionEventHandler);
+         
         //Adding 
     	
     	vbox.getChildren().addAll(title, gridshot, tracking, reactionTime);
         start.getChildren().addAll(label, name, create);
         difficulty.getChildren().addAll(diff, easy, medium, hard);
+       
         
         //On button press it creates a new player
         create.setOnAction(e -> { 
@@ -208,6 +270,11 @@ public class GUIAIMDriver extends Application {
         gridshot.setOnAction(e -> {
         	stage.setScene(difficultyGrid);
         });
+        
+        reactionTime.setOnAction(e -> {
+        	stage.setScene(reactionScene);
+        });
+        
 
         easy.setOnAction(e -> {
         	stage.setScene(gridShotScene);
