@@ -38,6 +38,7 @@ public class GUIAIMDriver extends Application {
 	private static final int MAX_X = 1000;
 	private static final int MAX_Y = 600;
 	int clickCount = 0;
+	int reactionClickCount = 0;
 	long startTimeGrid = 0;
 	long endTimeGrid = 0;
 	long startTimeReact = 0;
@@ -69,16 +70,19 @@ public class GUIAIMDriver extends Application {
         VBox start = new VBox(20);
         VBox vbox = new VBox(20);
         VBox difficulty = new VBox(20);
+        VBox endScreen = new VBox(20);
         
         //Center the vbox's
         start.setAlignment(Pos.CENTER);
         vbox.setAlignment(Pos.CENTER);
         difficulty.setAlignment(Pos.CENTER);
+        endScreen.setAlignment(Pos.CENTER);
         
         //Creates the scenes (or windows)
         Scene scene = new Scene(start, HEIGHT, WIDTH);
         Scene mainMenu = new Scene(vbox, 800, 800);
         Scene difficultyGrid = new Scene(difficulty, HEIGHT, WIDTH);
+        Scene gameOver = new Scene(endScreen, 400,400);
        
         //Sets the scene to the create player screen
         stage.setScene(scene); 
@@ -112,7 +116,7 @@ public class GUIAIMDriver extends Application {
   	  	Group onScreen = new Group(circle, text); 
   	  	Scene gridShotScene = new Scene(onScreen, MAX_X, MAX_Y); 
   	  	gridShotScene.setFill(Color.BLACK);
-  	 // Timer stuff
+  	  	// Timer stuff
   	  	Random randomNum = new Random();
 		int randomSec = 1 + randomNum.nextInt(5);
 		
@@ -131,17 +135,38 @@ public class GUIAIMDriver extends Application {
   	  	Scene reactionScene = new Scene(reactGroup, 1100, 800);
   	  	rec.setVisible(false);
   	  	rec.setFill(Color.GREEN);
+  	  	
+  	     //Detects background event click
+        EventHandler<MouseEvent> reactionBackground = new EventHandler<MouseEvent>() {
+       	 public void handle(MouseEvent e) {
+       		if (reactionClickCount > 1) {
+       			if (!startReact.isVisible()) {
+       			stage.setScene(gameOver); 
+       		}
+       		}
+       		
+       	 }	 
+        };
+        
+        reactionScene.addEventFilter(MouseEvent.MOUSE_CLICKED, reactionBackground);
+        
   	 //Starts timer 
   	  startReact.setOnAction(e -> {
+  		 reactionClickCount++;
   		Timer timer = new Timer();
 		TimerTask task = new TimerTask() {
 			public void run() {
 				if (!stopTimer) {
 				if (randomSec == secondsPassed) {
 					stopTimer = true;
+					reactionClickCount = 0;
 					rec.setVisible(true);
 					startTimeReact = System.currentTimeMillis();
 					
+					
+				}
+				if(secondsPassed == 1) {
+					reactionClickCount = reactionClickCount + 1;
 				}
 				secondsPassed++;
 				System.out.println(secondsPassed);
@@ -153,7 +178,15 @@ public class GUIAIMDriver extends Application {
   		startReact.setVisible(false);
   		
   	   });
-  	  	
+  	  	//Create game over screen
+  	  Label reactlbl = new Label("Clicked early!");
+  	  reactlbl.setFont(font);
+  	  Button reactTryAgain = new Button("Quit"); 
+  	  reactTryAgain.setFont(buttonFont);
+  	  reactTryAgain.setPrefSize(200, 50);
+  	  
+  
+    
     	//Creation of buttons (main menu)
     	Label title = new Label("Welcome " + newPlayer.getName() + "!");
     	title.setTextFill(Color.BLUEVIOLET);
@@ -236,21 +269,26 @@ public class GUIAIMDriver extends Application {
         		if (stopTimer = true) {
         			endTimeReact = System.currentTimeMillis();
         			System.out.println(endTimeReact - startTimeReact + "ms");
-        			
-        		}
-        		
+        		} 
         	 }	 
          };
          
          rec.addEventFilter(MouseEvent.MOUSE_CLICKED, reactionEventHandler);
+         
+        
          
         //Adding 
     	
     	vbox.getChildren().addAll(title, gridshot, tracking, reactionTime);
         start.getChildren().addAll(label, name, create);
         difficulty.getChildren().addAll(diff, easy, medium, hard);
-       
-        
+        endScreen.getChildren().addAll(reactlbl, reactTryAgain);
+        //Try again button
+    	reactTryAgain.setOnAction(e -> { 
+        	stage.close();
+        	
+        });  
+    	
         //On button press it creates a new player
         create.setOnAction(e -> { 
         	stage.setScene(mainMenu);
