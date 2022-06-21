@@ -109,11 +109,11 @@ public class GUIAIMDriver extends Application {
 		randomPOS = new Random();
 		Circle circle = new Circle(MAX_X / 2, MAX_Y / 2, 30);
 		circle.setFill(Color.PURPLE);
-		Text text = new Text("Click on the circle to start the game");
-		text.setX(400);
-		text.setY(250);
-		text.setFill(Color.WHITE);
-		Group onScreen = new Group(circle, text);
+		Text gtext = new Text("Click on the circle to start the game");
+		gtext.setX(400);
+		gtext.setY(250);
+		gtext.setFill(Color.WHITE);
+		Group onScreen = new Group(circle, gtext);
 		Scene gridShotScene = new Scene(onScreen, MAX_X, MAX_Y);
 		gridShotScene.setFill(Color.BLACK);
 		
@@ -134,7 +134,7 @@ public class GUIAIMDriver extends Application {
 		trackText.setFill(Color.WHITE);
 		trackText.setX(350);
 		trackText.setY(50);
-		Group trackingScrn = new Group(trackCircle, text);
+		Group trackingScrn = new Group(trackCircle, trackText);
 		Scene trackScene = new Scene(trackingScrn, MAX_X, MAX_Y);
 		trackScene.setFill(Color.LIGHTSKYBLUE);
 		stage.setTitle("Tracking");
@@ -263,7 +263,7 @@ public class GUIAIMDriver extends Application {
 					clickCount = 0;
 					clickCount++;
 				}
-				text.setText("Your current score is " + clickCount);
+				gtext.setText("Your current score is " + clickCount);
 
 				startTimeGrid = System.currentTimeMillis();
 				if (clickCount == 1)
@@ -303,15 +303,15 @@ public class GUIAIMDriver extends Application {
 				circle.setCenterY(randomPOS.nextInt((int) MAX_Y - 30) + 30);
 
 				if (clickCount < 0) {
-					text.setText("Your current score is 0");
+					gtext.setText("Your current score is 0");
 				} else {
-					text.setText("Your current score is " + clickCount);
+					gtext.setText("Your current score is " + clickCount);
 				}
 
-				text.setX(10);
-				text.setY(30);
-				text.setFont(buttonFont);
-				text.setFill(Color.WHITE);
+				gtext.setX(10);
+				gtext.setY(30);
+				gtext.setFont(buttonFont);
+				gtext.setFill(Color.WHITE);
 
 			}
 
