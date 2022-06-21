@@ -1,5 +1,7 @@
 package soaztrAimTrainer;
 
+import javafx.animation.PathTransition;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -16,10 +18,13 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Polyline;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.event.EventHandler;
@@ -111,6 +116,60 @@ public class GUIAIMDriver extends Application {
 		Group onScreen = new Group(circle, text);
 		Scene gridShotScene = new Scene(onScreen, MAX_X, MAX_Y);
 		gridShotScene.setFill(Color.BLACK);
+		
+
+		
+				
+		//
+		
+		Circle trackCircle = new Circle(MAX_X / 2, MAX_Y / 2, 30);
+		trackCircle.setFill(Color.GREEN);
+
+		// Setting the position of the circle
+		trackCircle.setCenterX(randomPOS.nextInt((int) MAX_X));
+		trackCircle.setCenterY(randomPOS.nextInt((int) MAX_Y));
+		
+		Text trackText = new Text("Click on the circle to start");
+		trackText.setFont(Font.font(null, FontWeight.BOLD, 15));
+		trackText.setFill(Color.WHITE);
+		trackText.setX(350);
+		trackText.setY(50);
+		Group trackingScrn = new Group(trackCircle, text);
+		Scene trackScene = new Scene(trackingScrn, MAX_X, MAX_Y);
+		trackScene.setFill(Color.LIGHTSKYBLUE);
+		stage.setTitle("Tracking");
+		
+		
+		Polyline polyline = new Polyline();
+		polyline.getPoints().addAll(new Double[] {
+			trackCircle.getCenterX(), trackCircle.getCenterY(),
+			(double) randomPOS.nextInt((int) MAX_X), (double)randomPOS.nextInt((int) MAX_Y),
+			(double) randomPOS.nextInt((int) MAX_X), (double)randomPOS.nextInt((int) MAX_Y),
+			(double) randomPOS.nextInt((int) MAX_X), (double)randomPOS.nextInt((int) MAX_Y),
+			(double) randomPOS.nextInt((int) MAX_X), (double)randomPOS.nextInt((int) MAX_Y),
+			(double) randomPOS.nextInt((int) MAX_X), (double)randomPOS.nextInt((int) MAX_Y),
+			(double) randomPOS.nextInt((int) MAX_X), (double)randomPOS.nextInt((int) MAX_Y),
+			(double) randomPOS.nextInt((int) MAX_X), (double)randomPOS.nextInt((int) MAX_Y),
+			(double) randomPOS.nextInt((int) MAX_X), (double)randomPOS.nextInt((int) MAX_Y),
+			(double) randomPOS.nextInt((int) MAX_X), (double)randomPOS.nextInt((int) MAX_Y)
+			});
+		
+		
+		PathTransition transition = new PathTransition();
+		transition.setNode(trackCircle);
+		transition.setDuration(Duration.seconds(20.0));
+		transition.setPath(polyline);
+		transition.setCycleCount(Timeline.INDEFINITE);
+		transition.setAutoReverse(true);
+		boolean moving = false;
+		
+		
+
+	
+	
+
+
+		
 		// Timer stuff
 		Random randomNum = new Random();
 		int randomSec = 1 + randomNum.nextInt(5);
@@ -270,17 +329,24 @@ public class GUIAIMDriver extends Application {
 		};
 
 		rec.addEventFilter(MouseEvent.MOUSE_CLICKED, reactionEventHandler);
-
+		
+		EventHandler<MouseEvent> circleMovement = new EventHandler<MouseEvent>() {
+	       	 public void handle(MouseEvent e) {
+	       		transition.play();
+	       		trackText.setVisible(false);
+	       	 }	 };
+			
+	        trackCircle.addEventFilter(MouseEvent.MOUSE_CLICKED, circleMovement);
+	        
 		// Adding
-
 		vbox.getChildren().addAll(title, gridshot, tracking, reactionTime);
 		start.getChildren().addAll(label, name, create);
 		difficulty.getChildren().addAll(diff, easy, medium, hard);
 		endScreen.getChildren().addAll(reactlbl, reactTryAgain);
+		
 		// Try again button
 		reactTryAgain.setOnAction(e -> {
 			stage.close();
-
 		});
 
 		// On button press it creates a new player
@@ -303,6 +369,8 @@ public class GUIAIMDriver extends Application {
 			stage.setScene(difficultyGrid);
 			stage.setTitle("Select Difficulty");
 		});
+		
+		
 
 		reactionTime.setOnAction(e -> {
 			stage.setScene(reactionScene);
@@ -327,6 +395,11 @@ public class GUIAIMDriver extends Application {
 			stage.setTitle(newPlayer.getName() + " | " + "Gridshot" + " | " + "Hard");
 			circle.setRadius(10);
 			newPlayer.setDiff("Hard");
+		});
+		
+		tracking.setOnAction (e -> {
+			stage.setScene(trackScene);
+			
 		});
 
 		stage.show();
