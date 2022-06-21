@@ -191,8 +191,8 @@ public class GUIAIMDriver extends Application {
 		rec.setFill(Color.GREEN);
 
 		// Create game over screen
-		Label reactlbl = new Label("Clicked early!");
-		reactlbl.setFont(font);
+		Label gameOverLbl = new Label("Clicked early!");
+		gameOverLbl.setFont(font);
 		Button reactTryAgain = new Button("Quit");
 		reactTryAgain.setFont(buttonFont);
 		reactTryAgain.setPrefSize(200, 50);
@@ -272,9 +272,10 @@ public class GUIAIMDriver extends Application {
 
 				// At 50 score, the program will print how long it took you to click 50 circles
 				if (clickCount == 5) {
+					stage.setScene(gameOver);
 					long totalSec = TimeUnit.MILLISECONDS.toSeconds(totalTime);
-					System.out.println(totalSec);
 					newPlayer.setTime(totalSec);
+					gameOverLbl.setText("Time: " + newPlayer.getTime() + " Seconds");
 					try {
 						FileWriter myWriter = new FileWriter("gridshotHS.txt", true);
 						myWriter.write("\n Username: " + newPlayer.getName() + " | " + "Time: " + newPlayer.getTime()
@@ -323,7 +324,7 @@ public class GUIAIMDriver extends Application {
 				if (stopTimer = true) {
 					endTimeReact = System.currentTimeMillis();
 					System.out.println(endTimeReact - startTimeReact + "ms");
-					reactlbl.setText(Long.toString(endTimeReact - startTimeReact) + "MS");
+					gameOverLbl.setText(Long.toString(endTimeReact - startTimeReact) + "MS");
 					stage.setScene(gameOver);
 				}
 			}
@@ -343,7 +344,7 @@ public class GUIAIMDriver extends Application {
 		vbox.getChildren().addAll(title, gridshot, tracking, reactionTime);
 		start.getChildren().addAll(label, name, create);
 		difficulty.getChildren().addAll(diff, easy, medium, hard);
-		endScreen.getChildren().addAll(reactlbl, reactTryAgain);
+		endScreen.getChildren().addAll(gameOverLbl, reactTryAgain);
 		
 		// Try again button
 		reactTryAgain.setOnAction(e -> {
