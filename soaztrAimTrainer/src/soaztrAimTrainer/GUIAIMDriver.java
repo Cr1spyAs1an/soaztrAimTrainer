@@ -176,7 +176,7 @@ public class GUIAIMDriver extends Application {
 
 		// creating reaction timer scene
 		Text reactTitle = new Text(
-				"After clicking start the background colour will change, try to click it as fast as you can\"");
+				"After clicking start the background colour will change, try to click it as fast as you can");
 		reactTitle.setX(50);
 		reactTitle.setY(50);
 		reactTitle.setFont(reactFont);
@@ -279,6 +279,7 @@ public class GUIAIMDriver extends Application {
 						FileWriter myWriter = new FileWriter("gridshotHS.txt", true);
 						myWriter.write("\n Username: " + newPlayer.getName() + " | " + "Time: " + newPlayer.getTime()
 								+ " Seconds" + " | Difficulty: " + newPlayer.getDiff());
+						System.out.println(newPlayer);
 						myWriter.close();
 					} catch (IOException d) {
 						System.out.println("error");
@@ -296,9 +297,9 @@ public class GUIAIMDriver extends Application {
 			public void handle(MouseEvent e) {
 
 				clickCount--;
-
-				circle.setCenterX(randomPOS.nextInt((int) MAX_X));
-				circle.setCenterY(randomPOS.nextInt((int) MAX_Y));
+				
+				circle.setCenterX(randomPOS.nextInt((int) MAX_X - 30) + 30);
+				circle.setCenterY(randomPOS.nextInt((int) MAX_Y - 30) + 30);
 
 				if (clickCount < 0) {
 					text.setText("Your current score is 0");

@@ -14,3 +14,9 @@
  Username: Guest | Time: 2 Seconds | Difficulty: Medium
  Username: Guest | Time: 4 Seconds | Difficulty: Hard
  Username: Guest | Time: 5 Seconds | Difficulty: Hard
+ Username: Guest | Time: 3 Seconds | Difficulty: Easy
+ Username: Guest | Time: 3 Seconds | Difficulty: Hard
+ Username: Guest | Time: 2 Seconds | Difficulty: Easy
+ Username: Guest | Time: 2 Seconds | Difficulty: Easy
+ Username: Guest | Time: 2 Seconds | Difficulty: Medium
+ Username: Guest | Time: 3 Seconds | Difficulty: Hard

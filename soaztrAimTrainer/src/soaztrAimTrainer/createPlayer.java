@@ -45,7 +45,7 @@ public class createPlayer {
 	@Override 
 	
 	public String toString() {
-		return String.format("Name: %s | Time: %s | Difficulty: %s", name, time, difficulty);
+		return String.format("Username: %s | Time: %s | Difficulty: %s", name, time, difficulty);
 	}
 	
 	
