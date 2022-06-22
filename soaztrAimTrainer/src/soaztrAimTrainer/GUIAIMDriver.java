@@ -322,7 +322,6 @@ public class GUIAIMDriver extends Application {
 		EventHandler<MouseEvent> circleMovement = new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent e) {
 				transition.play();
-				trackText.setVisible(false);
 				startTrack = true;
 			}
 		};
@@ -332,18 +331,17 @@ public class GUIAIMDriver extends Application {
 		EventHandler<MouseEvent> circleTrack = new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent e) {
 				
-				if (startTrack = true) {
+				if (startTrack) {
 					clickCount++;
-					gtext.setVisible(true);
 					
-					gtext.setText("Your current score is " + clickCount);
-					gtext.setX(10);
-					gtext.setY(30);
-					gtext.setFont(buttonFont);
-					gtext.setFill(Color.WHITE);
+					
+					trackText.setText("Your current score is " + clickCount);
+					trackText.setX(10);
+					trackText.setY(30);
+					trackText.setFont(buttonFont);
+					trackText.setFill(Color.WHITE);
 					System.out.println(clickCount);
-				} else {
-					clickCount = 0;
+					
 				}
 				
 				
