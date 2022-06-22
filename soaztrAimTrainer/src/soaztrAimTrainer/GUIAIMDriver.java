@@ -53,6 +53,7 @@ public class GUIAIMDriver extends Application {
 	public Random randomPOS;
 	createPlayer newPlayer = new createPlayer("Guest", 0, "NA");
 	boolean hitTarget = false;
+	boolean startTrack = false;
 
 	@Override
 	public void start(Stage stage) throws Exception {
@@ -116,19 +117,16 @@ public class GUIAIMDriver extends Application {
 		Group onScreen = new Group(circle, gtext);
 		Scene gridShotScene = new Scene(onScreen, MAX_X, MAX_Y);
 		gridShotScene.setFill(Color.BLACK);
-		
 
-		
-				
 		//
-		
+
 		Circle trackCircle = new Circle(MAX_X / 2, MAX_Y / 2, 30);
 		trackCircle.setFill(Color.GREEN);
 
 		// Setting the position of the circle
 		trackCircle.setCenterX(randomPOS.nextInt((int) MAX_X));
 		trackCircle.setCenterY(randomPOS.nextInt((int) MAX_Y));
-		
+
 		Text trackText = new Text("Click on the circle to start");
 		trackText.setFont(Font.font(null, FontWeight.BOLD, 15));
 		trackText.setFill(Color.WHITE);
@@ -138,23 +136,20 @@ public class GUIAIMDriver extends Application {
 		Scene trackScene = new Scene(trackingScrn, MAX_X, MAX_Y);
 		trackScene.setFill(Color.LIGHTSKYBLUE);
 		stage.setTitle("Tracking");
-		
-		
+
 		Polyline polyline = new Polyline();
-		polyline.getPoints().addAll(new Double[] {
-			trackCircle.getCenterX(), trackCircle.getCenterY(),
-			(double) randomPOS.nextInt((int) MAX_X), (double)randomPOS.nextInt((int) MAX_Y),
-			(double) randomPOS.nextInt((int) MAX_X), (double)randomPOS.nextInt((int) MAX_Y),
-			(double) randomPOS.nextInt((int) MAX_X), (double)randomPOS.nextInt((int) MAX_Y),
-			(double) randomPOS.nextInt((int) MAX_X), (double)randomPOS.nextInt((int) MAX_Y),
-			(double) randomPOS.nextInt((int) MAX_X), (double)randomPOS.nextInt((int) MAX_Y),
-			(double) randomPOS.nextInt((int) MAX_X), (double)randomPOS.nextInt((int) MAX_Y),
-			(double) randomPOS.nextInt((int) MAX_X), (double)randomPOS.nextInt((int) MAX_Y),
-			(double) randomPOS.nextInt((int) MAX_X), (double)randomPOS.nextInt((int) MAX_Y),
-			(double) randomPOS.nextInt((int) MAX_X), (double)randomPOS.nextInt((int) MAX_Y)
-			});
-		
-		
+		polyline.getPoints()
+				.addAll(new Double[] { trackCircle.getCenterX(), trackCircle.getCenterY(),
+						(double) randomPOS.nextInt((int) MAX_X), (double) randomPOS.nextInt((int) MAX_Y),
+						(double) randomPOS.nextInt((int) MAX_X), (double) randomPOS.nextInt((int) MAX_Y),
+						(double) randomPOS.nextInt((int) MAX_X), (double) randomPOS.nextInt((int) MAX_Y),
+						(double) randomPOS.nextInt((int) MAX_X), (double) randomPOS.nextInt((int) MAX_Y),
+						(double) randomPOS.nextInt((int) MAX_X), (double) randomPOS.nextInt((int) MAX_Y),
+						(double) randomPOS.nextInt((int) MAX_X), (double) randomPOS.nextInt((int) MAX_Y),
+						(double) randomPOS.nextInt((int) MAX_X), (double) randomPOS.nextInt((int) MAX_Y),
+						(double) randomPOS.nextInt((int) MAX_X), (double) randomPOS.nextInt((int) MAX_Y),
+						(double) randomPOS.nextInt((int) MAX_X), (double) randomPOS.nextInt((int) MAX_Y) });
+
 		PathTransition transition = new PathTransition();
 		transition.setNode(trackCircle);
 		transition.setDuration(Duration.seconds(20.0));
@@ -162,14 +157,7 @@ public class GUIAIMDriver extends Application {
 		transition.setCycleCount(Timeline.INDEFINITE);
 		transition.setAutoReverse(true);
 		boolean moving = false;
-		
-		
 
-	
-	
-
-
-		
 		// Timer stuff
 		Random randomNum = new Random();
 		int randomSec = 1 + randomNum.nextInt(5);
@@ -223,8 +211,7 @@ public class GUIAIMDriver extends Application {
 							reactionClickCount = 0;
 							rec.setVisible(true);
 							startTimeReact = System.currentTimeMillis();
-							
-							
+
 						}
 						if (secondsPassed == 1) {
 							reactionClickCount = reactionClickCount + 1;
@@ -298,7 +285,7 @@ public class GUIAIMDriver extends Application {
 			public void handle(MouseEvent e) {
 
 				clickCount--;
-				
+
 				circle.setCenterX(randomPOS.nextInt((int) MAX_X - 30) + 30);
 				circle.setCenterY(randomPOS.nextInt((int) MAX_Y - 30) + 30);
 
@@ -331,21 +318,46 @@ public class GUIAIMDriver extends Application {
 		};
 
 		rec.addEventFilter(MouseEvent.MOUSE_CLICKED, reactionEventHandler);
-		
+
 		EventHandler<MouseEvent> circleMovement = new EventHandler<MouseEvent>() {
-	       	 public void handle(MouseEvent e) {
-	       		transition.play();
-	       		trackText.setVisible(false);
-	       	 }	 };
-			
-	        trackCircle.addEventFilter(MouseEvent.MOUSE_CLICKED, circleMovement);
-	        
+			public void handle(MouseEvent e) {
+				transition.play();
+				trackText.setVisible(false);
+				startTrack = true;
+			}
+		};
+
+		trackCircle.addEventFilter(MouseEvent.MOUSE_CLICKED, circleMovement);
+
+		EventHandler<MouseEvent> circleTrack = new EventHandler<MouseEvent>() {
+			public void handle(MouseEvent e) {
+				
+				if (startTrack = true) {
+					clickCount++;
+					gtext.setVisible(true);
+					
+					gtext.setText("Your current score is " + clickCount);
+					gtext.setX(10);
+					gtext.setY(30);
+					gtext.setFont(buttonFont);
+					gtext.setFill(Color.WHITE);
+					System.out.println(clickCount);
+				} else {
+					clickCount = 0;
+				}
+				
+				
+
+			}
+		};
+		trackCircle.addEventFilter(MouseEvent.MOUSE_MOVED, circleTrack);
+
 		// Adding
 		vbox.getChildren().addAll(title, gridshot, tracking, reactionTime);
 		start.getChildren().addAll(label, name, create);
 		difficulty.getChildren().addAll(diff, easy, medium, hard);
 		endScreen.getChildren().addAll(gameOverLbl, reactTryAgain);
-		
+
 		// Try again button
 		reactTryAgain.setOnAction(e -> {
 			stage.close();
@@ -371,8 +383,6 @@ public class GUIAIMDriver extends Application {
 			stage.setScene(difficultyGrid);
 			stage.setTitle("Select Difficulty");
 		});
-		
-		
 
 		reactionTime.setOnAction(e -> {
 			stage.setScene(reactionScene);
@@ -398,16 +408,16 @@ public class GUIAIMDriver extends Application {
 			circle.setRadius(10);
 			newPlayer.setDiff("Hard");
 		});
-		
-		tracking.setOnAction (e -> {
+
+		tracking.setOnAction(e -> {
 			stage.setScene(trackScene);
-			
+
 		});
 
 		stage.show();
 
 	}
-	
+
 	public static void main(String[] args) {
 		launch(args);
 
