@@ -39,14 +39,4 @@ public class createPlayer {
 		difficulty = setDiff;
 		return setDiff;
 	}
-	
-	
-	
-	@Override 
-	
-	public String toString() {
-		return String.format("Username: %s | Time: %s | Difficulty: %s", name, time, difficulty);
-	}
-	
-	
 }

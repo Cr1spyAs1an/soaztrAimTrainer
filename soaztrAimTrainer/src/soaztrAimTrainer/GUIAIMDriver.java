@@ -271,7 +271,7 @@ public class GUIAIMDriver extends Application {
 				long totalTime = startTimeGrid - endTimeGrid;
 
 				// At 50 score, the program will print how long it took you to click 50 circles
-				if (clickCount == 5) {
+				if (clickCount == 30) {
 					stage.setScene(gameOver);
 					long totalSec = TimeUnit.MILLISECONDS.toSeconds(totalTime);
 					newPlayer.setTime(totalSec);
@@ -407,13 +407,7 @@ public class GUIAIMDriver extends Application {
 		stage.show();
 
 	}
-
-	public static void decreaseSize(Circle circle, int clickCount) {
-		if (clickCount % 10 == 0) {
-			circle.setRadius(circle.getRadius() - 5);
-		}
-	}
-
+	
 	public static void main(String[] args) {
 		launch(args);
 
