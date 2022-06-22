@@ -54,6 +54,7 @@ public class GUIAIMDriver extends Application {
 	createPlayer newPlayer = new createPlayer("Guest", 0, "NA");
 	boolean hitTarget = false;
 	boolean startTrack = false;
+	
 
 	@Override
 	public void start(Stage stage) throws Exception {
@@ -323,6 +324,11 @@ public class GUIAIMDriver extends Application {
 			public void handle(MouseEvent e) {
 				transition.play();
 				startTrack = true;
+			if (!stopTimer) {
+			timer.scheduleAtFixedRate(task, 1000, 1000);
+			}else {
+				secondsPassed = 0;
+				}
 			}
 		};
 
@@ -335,7 +341,7 @@ public class GUIAIMDriver extends Application {
 					clickCount++;
 					
 					
-					trackText.setText("Your current score is " + clickCount);
+					trackText.setText("Your current score is " + clickCount + " | Time:" + secondsPassed);
 					trackText.setX(10);
 					trackText.setY(30);
 					trackText.setFont(buttonFont);
