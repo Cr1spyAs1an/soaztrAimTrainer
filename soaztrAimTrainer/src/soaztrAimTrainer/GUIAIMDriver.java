@@ -66,6 +66,7 @@ public class GUIAIMDriver extends Application {
 	
 	@Override
 	public void start(Stage stage) throws Exception {
+		
 		//Sorts highscore and puts it in gridArray
 		BufferedReader in = new BufferedReader(new FileReader("gridshotHS.txt"));
 		String line;
@@ -332,7 +333,7 @@ public class GUIAIMDriver extends Application {
 		highScores.setMinSize(400, 50);
 		highScores.setFont(buttonFont);
 		
-		EventHandler<MouseEvent> circleEventHandler = new EventHandler<MouseEvent>() {
+		EventHandler<MouseEvent> circleClick = new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent e) {
 				if (clickCount >= 0) {
 					clickCount = clickCount + 2;
@@ -375,9 +376,9 @@ public class GUIAIMDriver extends Application {
 			}
 		};
 
-		circle.addEventFilter(MouseEvent.MOUSE_CLICKED, circleEventHandler);
+		circle.addEventFilter(MouseEvent.MOUSE_CLICKED, circleClick);
 
-		EventHandler<MouseEvent> backgroundEventHandler = new EventHandler<MouseEvent>() {
+		EventHandler<MouseEvent> backgroundClick = new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent e) {
 
 				clickCount--;
@@ -400,7 +401,7 @@ public class GUIAIMDriver extends Application {
 
 		};
 
-		gridShotScene.addEventFilter(MouseEvent.MOUSE_CLICKED, backgroundEventHandler);
+		gridShotScene.addEventFilter(MouseEvent.MOUSE_CLICKED, backgroundClick);
 
 		EventHandler<MouseEvent> reactionEventHandler = new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent e) {
