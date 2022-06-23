@@ -45,8 +45,8 @@ public class GUIAIMDriver extends Application {
 
 	final int WIDTH = 400;
 	final int HEIGHT = 400;
-	private static final int MAX_X = 1000;
-	private static final int MAX_Y = 600;
+	final int MAX_X = 1000;
+	final int MAX_Y = 600;
 	int scoreCount = 0;
 	int reaction = 0;
 	int randomSec = 0; // Getting random times for reaction time
@@ -55,11 +55,14 @@ public class GUIAIMDriver extends Application {
 	long startTimeReact = 0;
 	long endTimeReact = 0;
 	int secondsPassed = 0;
+	int secPassTrack = 0;
 	boolean stopTimer = false;
+	boolean stopTrackTimer = false;
 	public Random randomPOS;
 	createPlayer newPlayer = new createPlayer("Guest", 0, "NA");
 	boolean hitTarget = false;
 	boolean startTrack = false;
+	int trackTime = 25;
 	
 	ArrayList<String> gridArray = new ArrayList<String>(); 
 	ArrayList<String> reactArray = new ArrayList<String>();
@@ -209,11 +212,16 @@ public class GUIAIMDriver extends Application {
 		trackCircle.setCenterX(randomPOS.nextInt((int) MAX_X));
 		trackCircle.setCenterY(randomPOS.nextInt((int) MAX_Y));
 		Text trackText = new Text("Click on the circle to start");
+		Text timeText = new Text();
+		timeText.setFont(Font.font(null, FontWeight.BOLD, 15));
+		timeText.setFill(Color.WHITE);
+		timeText.setX(900);
+		timeText.setY(50);
 		trackText.setFont(Font.font(null, FontWeight.BOLD, 15));
 		trackText.setFill(Color.WHITE);
 		trackText.setX(350);
 		trackText.setY(50);
-		Group trackingScrn = new Group(trackCircle, trackText);
+		Group trackingScrn = new Group(trackCircle, trackText, timeText);
 		Scene trackScene = new Scene(trackingScrn, MAX_X, MAX_Y);
 		trackScene.setFill(Color.LIGHTSKYBLUE);
 		stage.setTitle("Tracking");
@@ -295,11 +303,30 @@ public class GUIAIMDriver extends Application {
 					if (secondsPassed == 1) {
 						reaction = reaction + 1;
 					}
+					
 					secondsPassed++;
 					System.out.println(secondsPassed);
 				}
 			}
 		};
+		
+		Timer trackTimer = new Timer();
+		TimerTask trackTask = new TimerTask() {
+			public void run() {
+				if (!stopTrackTimer) {
+					if (trackTime == secPassTrack) {
+						stopTrackTimer = true;
+						
+					}
+					timeText.setText("Time:" + secPassTrack);
+					secPassTrack++;
+				}
+				
+				
+			}
+		};
+		
+	
 		// Starts timer
 		startReact.setOnAction(e -> {
 			reaction++;
@@ -337,7 +364,7 @@ public class GUIAIMDriver extends Application {
 				
 				// score increases and label is updated 
 				if (scoreCount>= 0) {
-					scoreCount =  + 2;
+					scoreCount += 2;
 				}
 				if ( scoreCount < 0) {
 					scoreCount = 0;
@@ -434,11 +461,13 @@ public class GUIAIMDriver extends Application {
 			public void handle(MouseEvent e) {
 				transition.play();
 				startTrack = true;
-				if (!stopTimer) {
-					timer.scheduleAtFixedRate(task, 1000, 1000);
+			if (!stopTrackTimer) {	
+				trackTimer.scheduleAtFixedRate(trackTask, 1000, 1000);
 				} else {
-					secondsPassed = 0;
+					trackTime = 0;
+					stopTrackTimer = false;
 				}
+			
 			}
 		};
 		trackCircle.addEventFilter(MouseEvent.MOUSE_CLICKED, circleMovement);
@@ -450,13 +479,14 @@ public class GUIAIMDriver extends Application {
 			public void handle(MouseEvent e) {
 				if (startTrack) {
 					scoreCount++;
-					trackText.setText("Your current score is " + scoreCount + " | Time:" + secondsPassed);
+					trackText.setText("Your current score is " + scoreCount);
 					trackText.setX(10);
 					trackText.setY(30);
 					trackText.setFont(buttonFont);
 					trackText.setFill(Color.WHITE);
 					System.out.println();
 				}
+				
 			}
 		};
 		trackCircle.addEventFilter(MouseEvent.MOUSE_MOVED, circleTrack);
