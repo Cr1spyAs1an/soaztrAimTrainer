@@ -47,8 +47,8 @@ public class GUIAIMDriver extends Application {
 	final int HEIGHT = 400;
 	private static final int MAX_X = 1000;
 	private static final int MAX_Y = 600;
-	int clickCount = 0;
-	int reactionClickCount = 0;
+	int scoreCount = 0;
+	int reaction = 0;
 	int randomSec = 0; // Getting random times for reaction time
 	long startTimeGrid = 0;
 	long endTimeGrid = 0;
@@ -203,13 +203,11 @@ public class GUIAIMDriver extends Application {
 		Scene gridShotScene = new Scene(onScreen, MAX_X, MAX_Y);
 		gridShotScene.setFill(Color.BLACK);
 
+		// creating tracking screen 
 		Circle trackCircle = new Circle(MAX_X / 2, MAX_Y / 2, 30);
 		trackCircle.setFill(Color.GREEN);
-
-		// Setting the position of the circle
 		trackCircle.setCenterX(randomPOS.nextInt((int) MAX_X));
 		trackCircle.setCenterY(randomPOS.nextInt((int) MAX_Y));
-
 		Text trackText = new Text("Click on the circle to start");
 		trackText.setFont(Font.font(null, FontWeight.BOLD, 15));
 		trackText.setFill(Color.WHITE);
@@ -219,7 +217,8 @@ public class GUIAIMDriver extends Application {
 		Scene trackScene = new Scene(trackingScrn, MAX_X, MAX_Y);
 		trackScene.setFill(Color.LIGHTSKYBLUE);
 		stage.setTitle("Tracking");
-
+		
+		// tracking screen's circle movement 
 		Polyline polyline = new Polyline();
 		polyline.getPoints()
 				.addAll(new Double[] { trackCircle.getCenterX(), trackCircle.getCenterY(),
@@ -232,7 +231,6 @@ public class GUIAIMDriver extends Application {
 						(double) randomPOS.nextInt((int) MAX_X), (double) randomPOS.nextInt((int) MAX_Y),
 						(double) randomPOS.nextInt((int) MAX_X), (double) randomPOS.nextInt((int) MAX_Y),
 						(double) randomPOS.nextInt((int) MAX_X), (double) randomPOS.nextInt((int) MAX_Y) });
-
 		PathTransition transition = new PathTransition();
 		transition.setNode(trackCircle);
 		transition.setDuration(Duration.seconds(20.0));
@@ -270,7 +268,7 @@ public class GUIAIMDriver extends Application {
 		// Detects if user clicks too fast
 		EventHandler<MouseEvent> reactionBackground = new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent e) {
-				if (reactionClickCount > 1) {
+				if (reaction > 1) {
 					if (!startReact.isVisible()) {
 						stage.setScene(gameOver);
 						gameOverLbl.setText("Too fast!");
@@ -281,8 +279,8 @@ public class GUIAIMDriver extends Application {
 
 			}
 		};
-
 		reactionScene.addEventFilter(MouseEvent.MOUSE_CLICKED, reactionBackground);
+		
 		// Timer for reaction time
 		Timer timer = new Timer();
 		TimerTask task = new TimerTask() {
@@ -295,7 +293,7 @@ public class GUIAIMDriver extends Application {
 
 					}
 					if (secondsPassed == 1) {
-						reactionClickCount = reactionClickCount + 1;
+						reaction = reaction + 1;
 					}
 					secondsPassed++;
 					System.out.println(secondsPassed);
@@ -304,7 +302,7 @@ public class GUIAIMDriver extends Application {
 		};
 		// Starts timer
 		startReact.setOnAction(e -> {
-			reactionClickCount++;
+			reaction++;
 			if (!stopTimer) {
 				timer.scheduleAtFixedRate(task, 1000, 1000);
 				System.out.println(randomSec);
@@ -333,26 +331,29 @@ public class GUIAIMDriver extends Application {
 		highScores.setMinSize(400, 50);
 		highScores.setFont(buttonFont);
 		
+		/**
+		 * if the circle is clicked, score increases (gridshot screen)
+		 */
 		EventHandler<MouseEvent> circleClick = new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent e) {
-				if (clickCount >= 0) {
-					clickCount = clickCount + 2;
+				if (scoreCount>= 0) {
+					scoreCount =  + 2;
 				}
-				if (clickCount < 0) {
-					clickCount = 0;
-					clickCount++;
+				if ( scoreCount < 0) {
+					scoreCount = 0;
+					scoreCount++;
 				}
-				gtext.setText("Your current score is " + clickCount);
+				gtext.setText("Your current score is " + scoreCount);
 
 				startTimeGrid = System.currentTimeMillis();
-				if (clickCount == 1)
+				if (scoreCount == 1)
 					endTimeGrid = System.currentTimeMillis();
 				long totalTime = startTimeGrid - endTimeGrid;
 
 				// At 50 score, the program will print how long it took you to click 50 circles
-				if (clickCount == 30) {
+				if ( scoreCount == 30) {
 					stage.setScene(gameOver);
-					clickCount = 0;
+					 scoreCount = 0;
 					gtext.setText("Click to start the game");
 					gtext.setX(400);
 					gtext.setY(250);
@@ -370,39 +371,40 @@ public class GUIAIMDriver extends Application {
 						System.out.println("error");
 						d.printStackTrace();
 					}
-
 				}
-
 			}
 		};
-
 		circle.addEventFilter(MouseEvent.MOUSE_CLICKED, circleClick);
-
+		
+		/**
+		 * if background is clicked, user's score decreases (gridshot screen)
+		 */
 		EventHandler<MouseEvent> backgroundClick = new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent e) {
 
-				clickCount--;
+				scoreCount--;
 
 				circle.setCenterX(randomPOS.nextInt((int) MAX_X - 30) + 30);
 				circle.setCenterY(randomPOS.nextInt((int) MAX_Y - 30) + 30);
-
-				if (clickCount < 0) {
+				
+				if (scoreCount < 0) {
 					gtext.setText("Your current score is 0");
 				} else {
-					gtext.setText("Your current score is " + clickCount);
+					gtext.setText("Your current score is " + scoreCount);
 				}
-
 				gtext.setX(10);
 				gtext.setY(30);
 				gtext.setFont(buttonFont);
 				gtext.setFill(Color.WHITE);
-
 			}
 
 		};
 
 		gridShotScene.addEventFilter(MouseEvent.MOUSE_CLICKED, backgroundClick);
-
+		
+		/**
+		 * enables timer and updates score on the document 
+		 */
 		EventHandler<MouseEvent> reactionEventHandler = new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent e) {
 				if (stopTimer = true) {
@@ -424,9 +426,11 @@ public class GUIAIMDriver extends Application {
 				}
 			}
 		};
-
 		rec.addEventFilter(MouseEvent.MOUSE_CLICKED, reactionEventHandler);
-
+		
+		/**
+		 * when circle is clicked, the circle will begin moving on screen (tracking screen)
+		 */
 		EventHandler<MouseEvent> circleMovement = new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent e) {
 				transition.play();
@@ -438,24 +442,22 @@ public class GUIAIMDriver extends Application {
 				}
 			}
 		};
-
 		trackCircle.addEventFilter(MouseEvent.MOUSE_CLICKED, circleMovement);
-
+		
+		/**
+		 * when user hovers over circle, user's score/"tracker" is activated (tracking screen)
+		 */
 		EventHandler<MouseEvent> circleTrack = new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent e) {
-
 				if (startTrack) {
-					clickCount++;
-
-					trackText.setText("Your current score is " + clickCount + " | Time:" + secondsPassed);
+					scoreCount++;
+					trackText.setText("Your current score is " + scoreCount + " | Time:" + secondsPassed);
 					trackText.setX(10);
 					trackText.setY(30);
 					trackText.setFont(buttonFont);
 					trackText.setFill(Color.WHITE);
-					System.out.println(clickCount);
-
+					System.out.println();
 				}
-
 			}
 		};
 		trackCircle.addEventFilter(MouseEvent.MOUSE_MOVED, circleTrack);
@@ -503,7 +505,7 @@ public class GUIAIMDriver extends Application {
 			startReact.setVisible(true);
 			randomSec = 1 + randomNum.nextInt(5);
 			secondsPassed = 0;
-			reactionClickCount = 0;
+			reaction = 0;
 		});
 
 		easy.setOnAction(e -> {
