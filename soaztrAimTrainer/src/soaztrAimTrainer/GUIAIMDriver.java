@@ -44,6 +44,7 @@ public class GUIAIMDriver extends Application {
 	private static final int MAX_Y = 600;
 	int clickCount = 0;
 	int reactionClickCount = 0;
+	int randomSec = 0; // Getting random times for reaction time
 	long startTimeGrid = 0;
 	long endTimeGrid = 0;
 	long startTimeReact = 0;
@@ -54,6 +55,7 @@ public class GUIAIMDriver extends Application {
 	createPlayer newPlayer = new createPlayer("Guest", 0, "NA");
 	boolean hitTarget = false;
 	boolean startTrack = false;
+	
 	
 
 	@Override
@@ -119,7 +121,6 @@ public class GUIAIMDriver extends Application {
 		Scene gridShotScene = new Scene(onScreen, MAX_X, MAX_Y);
 		gridShotScene.setFill(Color.BLACK);
 
-		//
 
 		Circle trackCircle = new Circle(MAX_X / 2, MAX_Y / 2, 30);
 		trackCircle.setFill(Color.GREEN);
@@ -161,7 +162,7 @@ public class GUIAIMDriver extends Application {
 
 		// Timer stuff
 		Random randomNum = new Random();
-		int randomSec = 1 + randomNum.nextInt(5);
+		
 
 		// creating reaction timer scene
 		Text reactTitle = new Text(
@@ -182,16 +183,19 @@ public class GUIAIMDriver extends Application {
 		// Create game over screen
 		Label gameOverLbl = new Label("Clicked early!");
 		gameOverLbl.setFont(font);
-		Button reactTryAgain = new Button("Quit");
+		Button reactTryAgain = new Button("Menu");
 		reactTryAgain.setFont(buttonFont);
 		reactTryAgain.setPrefSize(200, 50);
 
-		// Detects background event click
+		// Detects if user clicks too fast
 		EventHandler<MouseEvent> reactionBackground = new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent e) {
 				if (reactionClickCount > 1) {
 					if (!startReact.isVisible()) {
 						stage.setScene(gameOver);
+						gameOverLbl.setText("Too fast!");
+						stopTimer = true;
+						
 					}
 				}
 
@@ -199,31 +203,36 @@ public class GUIAIMDriver extends Application {
 		};
 
 		reactionScene.addEventFilter(MouseEvent.MOUSE_CLICKED, reactionBackground);
+	//Timer for reaction time
+		Timer timer = new Timer();
+		TimerTask task = new TimerTask() {
+			public void run() {
+				if (!stopTimer) {
+					if (randomSec == secondsPassed) {
+						stopTimer = true;
+						rec.setVisible(true);
+						startTimeReact = System.currentTimeMillis();
+						
 
+					}
+					if (secondsPassed == 1) {
+						reactionClickCount = reactionClickCount + 1;
+					}
+					secondsPassed++;
+					System.out.println(secondsPassed);
+				}
+			}
+		};
 		// Starts timer
 		startReact.setOnAction(e -> {
 			reactionClickCount++;
-			Timer timer = new Timer();
-			TimerTask task = new TimerTask() {
-				public void run() {
-					if (!stopTimer) {
-						if (randomSec == secondsPassed) {
-							stopTimer = true;
-							reactionClickCount = 0;
-							rec.setVisible(true);
-							startTimeReact = System.currentTimeMillis();
-
-						}
-						if (secondsPassed == 1) {
-							reactionClickCount = reactionClickCount + 1;
-						}
-						secondsPassed++;
-						System.out.println(secondsPassed);
-					}
-				}
-			};
+			if (!stopTimer) {
 			timer.scheduleAtFixedRate(task, 1000, 1000);
 			System.out.println(randomSec);
+			} else {
+				stopTimer = false;
+				System.out.println(randomSec);
+			}
 			startReact.setVisible(false);
 
 		});
@@ -261,6 +270,12 @@ public class GUIAIMDriver extends Application {
 				// At 50 score, the program will print how long it took you to click 50 circles
 				if (clickCount == 30) {
 					stage.setScene(gameOver);
+					clickCount = 0;
+					gtext.setText("Click to start the game");
+					gtext.setX(400);
+					gtext.setY(250);
+					circle.setCenterX(MAX_X / 2);
+					circle.setCenterY(MAX_Y / 2);
 					long totalSec = TimeUnit.MILLISECONDS.toSeconds(totalTime);
 					newPlayer.setTime(totalSec);
 					gameOverLbl.setText("Time: " + newPlayer.getTime() + " Seconds");
@@ -268,7 +283,6 @@ public class GUIAIMDriver extends Application {
 						FileWriter myWriter = new FileWriter("gridshotHS.txt", true);
 						myWriter.write("\n Username: " + newPlayer.getName() + " | " + "Time: " + newPlayer.getTime()
 								+ " Seconds" + " | Difficulty: " + newPlayer.getDiff());
-						System.out.println(newPlayer);
 						myWriter.close();
 					} catch (IOException d) {
 						System.out.println("error");
@@ -312,8 +326,19 @@ public class GUIAIMDriver extends Application {
 				if (stopTimer = true) {
 					endTimeReact = System.currentTimeMillis();
 					System.out.println(endTimeReact - startTimeReact + "ms");
-					gameOverLbl.setText(Long.toString(endTimeReact - startTimeReact) + "MS");
+					long totalTimeReact = endTimeReact - startTimeReact;
+					gameOverLbl.setText(Long.toString(totalTimeReact) + "MS");
 					stage.setScene(gameOver);
+					newPlayer.setTime(totalTimeReact);
+					try {
+						FileWriter myWriter = new FileWriter("reactiontimeHS.txt", true);
+						myWriter.write("\n Username: " + newPlayer.getName() + " | " + "Time: " + newPlayer.getTime()
+								+ "MS");
+						myWriter.close();
+					} catch (IOException d) {
+						System.out.println("error");
+						d.printStackTrace();
+					}
 				}
 			}
 		};
@@ -364,7 +389,8 @@ public class GUIAIMDriver extends Application {
 
 		// Try again button
 		reactTryAgain.setOnAction(e -> {
-			stage.close();
+			stage.setScene(mainMenu);
+		
 		});
 
 		// On button press it creates a new player
@@ -379,8 +405,6 @@ public class GUIAIMDriver extends Application {
 			}
 			stage.setTitle("Select Gamemode");
 			mainMenu.setFill(Color.BLACK);
-			System.out.println(newPlayer);
-
 		});
 
 		gridshot.setOnAction(e -> {
@@ -391,6 +415,11 @@ public class GUIAIMDriver extends Application {
 		reactionTime.setOnAction(e -> {
 			stage.setScene(reactionScene);
 			stage.setTitle(newPlayer.getName() + " | " + "Reaction Time");
+			rec.setVisible(false);
+			startReact.setVisible(true);
+			randomSec = 1 + randomNum.nextInt(5);
+			secondsPassed = 0;
+			reactionClickCount = 0;
 		});
 
 		easy.setOnAction(e -> {
