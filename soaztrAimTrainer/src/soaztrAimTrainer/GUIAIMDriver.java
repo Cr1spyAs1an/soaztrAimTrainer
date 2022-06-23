@@ -331,11 +331,11 @@ public class GUIAIMDriver extends Application {
 		highScores.setMinSize(400, 50);
 		highScores.setFont(buttonFont);
 		
-		/**
-		 * if the circle is clicked, score increases (gridshot screen)
-		 */
+		// (gridshot screen) when circle is clicked.... 
 		EventHandler<MouseEvent> circleClick = new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent e) {
+				
+				// score increases and label is updated 
 				if (scoreCount>= 0) {
 					scoreCount =  + 2;
 				}
@@ -344,7 +344,8 @@ public class GUIAIMDriver extends Application {
 					scoreCount++;
 				}
 				gtext.setText("Your current score is " + scoreCount);
-
+				
+				// time is established 
 				startTimeGrid = System.currentTimeMillis();
 				if (scoreCount == 1)
 					endTimeGrid = System.currentTimeMillis();
@@ -376,9 +377,7 @@ public class GUIAIMDriver extends Application {
 		};
 		circle.addEventFilter(MouseEvent.MOUSE_CLICKED, circleClick);
 		
-		/**
-		 * if background is clicked, user's score decreases (gridshot screen)
-		 */
+		 // (gridshot screen) if user misses circle, score decreases 
 		EventHandler<MouseEvent> backgroundClick = new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent e) {
 
