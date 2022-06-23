@@ -45,7 +45,7 @@ public class tracking extends Application {
 		trackText.setFill(Color.WHITE);
 		trackText.setX(350);
 		trackText.setY(50);
-		Group trackingScrn = new Group(circle, text);
+		Group trackingScrn = new Group(trackCircle, trackText);
 		Scene scene = new Scene(trackingScrn, MAX_X, MAX_Y);
 		scene.setFill(Color.LIGHTSKYBLUE);
 		stage.setTitle("Tracking");
