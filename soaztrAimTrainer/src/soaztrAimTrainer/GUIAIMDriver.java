@@ -10,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.GridPane;
@@ -29,7 +30,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.event.EventHandler;
 import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -56,11 +61,70 @@ public class GUIAIMDriver extends Application {
 	boolean hitTarget = false;
 	boolean startTrack = false;
 	
+	ArrayList<String> gridArray = new ArrayList<String>(); 
+	ArrayList<String> reactArray = new ArrayList<String>();
 	
-
 	@Override
 	public void start(Stage stage) throws Exception {
+		//Sorts highscore and puts it in gridArray
+		BufferedReader in = new BufferedReader(new FileReader("gridshotHS.txt"));
+		String line;
+		while ((line = in.readLine()) != null) {
+			String hsNumber = line.replaceAll("[^0-9]", "");
+			try {
+				int value = Integer.parseInt(hsNumber.replaceAll("[^0-9]", ""));
+				gridArray.add(line);
+				
+				
+			} catch (NumberFormatException nfe) {
+			}
+		}
+		 for (int i = 0; i < gridArray.size() - 1; i++) {
+			 for (int j = 0; j < gridArray.size() - i - 1; j++) {
+				 int x = Integer.parseInt(gridArray.get(j).replaceAll("[^0-9]", ""));
+				 int y = Integer.parseInt(gridArray.get(j + 1).replaceAll("[^0-9]", ""));
+				 if (x > y) {
+					 int temp = x;
+					 Collections.swap(gridArray, j, j+1);
+					 y = temp;
+					 
+				 }
+			 }
+		 }
+		 System.out.println(gridArray); 
+	     
+		 //Sorts highscore and puts it in reactArray
+		 BufferedReader read = new BufferedReader(new FileReader("reactiontimeHS.txt"));
+			String line2;
+			while ((line2 = read.readLine()) != null) {
+				String reactNumber = line2.replaceAll("[^0-9]", "");
+				try {
+					int value2 = Integer.parseInt(reactNumber.replaceAll("[^0-9]", ""));
+					reactArray.add(line2);
+					
+					
+				} catch (NumberFormatException nfe) {
+				}
+			}
+			 for (int i = 0; i < reactArray.size() - 1; i++) {
+				 for (int j = 0; j < reactArray.size() - i - 1; j++) {
+					 int x = Integer.parseInt(reactArray.get(j).replaceAll("[^0-9]", ""));
+					 int y = Integer.parseInt(reactArray.get(j + 1).replaceAll("[^0-9]", ""));
+					 if (x > y) {
+						 int temp = x;
+						 Collections.swap(reactArray, j, j+1);
+						 y = temp;
+						 
+					 }
+				 }
+			 }
+			 System.out.println(reactArray); 
+		
+			in.close();
 
+		
+	            
+		
 		// establishing fonts
 		Font font = new Font("Consolas", 35);
 		Font buttonFont = new Font("Consolas", 24);
@@ -75,18 +139,35 @@ public class GUIAIMDriver extends Application {
 		VBox vbox = new VBox(20);
 		VBox difficulty = new VBox(20);
 		VBox endScreen = new VBox(20);
+		VBox hs = new VBox(20);
 
 		// Center the vbox's
 		start.setAlignment(Pos.CENTER);
 		vbox.setAlignment(Pos.CENTER);
 		difficulty.setAlignment(Pos.CENTER);
 		endScreen.setAlignment(Pos.CENTER);
-
+		hs.setAlignment(Pos.CENTER);
+		//Creating High Score menu
+		
+		Label hsTitle = new Label("Top 5 players in each mode");
+		hsTitle.setTextFill(Color.BLUEVIOLET);
+		hsTitle.setFont(font);
+		ListView listScores = new ListView<>();
+		listScores.getItems().addAll("******GRIDSHOT******");
+		for (int i = 0; i < 5; i++) {
+		listScores.getItems().addAll(gridArray.get(i));
+		}
+		listScores.getItems().addAll("******REACTION TIME******" );
+		for (int i = 0; i < 5; i++) {
+			listScores.getItems().addAll(reactArray.get(i));
+			}
+		stage.setTitle("HighScores");
 		// Creates the scenes (or windows)
 		Scene scene = new Scene(start, HEIGHT, WIDTH);
 		Scene mainMenu = new Scene(vbox, 800, 800);
 		Scene difficultyGrid = new Scene(difficulty, HEIGHT, WIDTH);
 		Scene gameOver = new Scene(endScreen, 400, 400);
+		Scene hsScene = new Scene(hs, 800, 1200);
 
 		// Sets the scene to the create player screen
 		stage.setScene(scene);
@@ -120,7 +201,6 @@ public class GUIAIMDriver extends Application {
 		Group onScreen = new Group(circle, gtext);
 		Scene gridShotScene = new Scene(onScreen, MAX_X, MAX_Y);
 		gridShotScene.setFill(Color.BLACK);
-
 
 		Circle trackCircle = new Circle(MAX_X / 2, MAX_Y / 2, 30);
 		trackCircle.setFill(Color.GREEN);
@@ -162,7 +242,6 @@ public class GUIAIMDriver extends Application {
 
 		// Timer stuff
 		Random randomNum = new Random();
-		
 
 		// creating reaction timer scene
 		Text reactTitle = new Text(
@@ -195,7 +274,7 @@ public class GUIAIMDriver extends Application {
 						stage.setScene(gameOver);
 						gameOverLbl.setText("Too fast!");
 						stopTimer = true;
-						
+
 					}
 				}
 
@@ -203,7 +282,7 @@ public class GUIAIMDriver extends Application {
 		};
 
 		reactionScene.addEventFilter(MouseEvent.MOUSE_CLICKED, reactionBackground);
-	//Timer for reaction time
+		// Timer for reaction time
 		Timer timer = new Timer();
 		TimerTask task = new TimerTask() {
 			public void run() {
@@ -212,7 +291,6 @@ public class GUIAIMDriver extends Application {
 						stopTimer = true;
 						rec.setVisible(true);
 						startTimeReact = System.currentTimeMillis();
-						
 
 					}
 					if (secondsPassed == 1) {
@@ -227,8 +305,8 @@ public class GUIAIMDriver extends Application {
 		startReact.setOnAction(e -> {
 			reactionClickCount++;
 			if (!stopTimer) {
-			timer.scheduleAtFixedRate(task, 1000, 1000);
-			System.out.println(randomSec);
+				timer.scheduleAtFixedRate(task, 1000, 1000);
+				System.out.println(randomSec);
 			} else {
 				stopTimer = false;
 				System.out.println(randomSec);
@@ -250,7 +328,10 @@ public class GUIAIMDriver extends Application {
 		Button reactionTime = new Button("REACTION TIME");
 		reactionTime.setMinSize(400, 50);
 		reactionTime.setFont(buttonFont);
-
+		Button highScores = new Button("High Scores");
+		highScores.setMinSize(400, 50);
+		highScores.setFont(buttonFont);
+		
 		EventHandler<MouseEvent> circleEventHandler = new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent e) {
 				if (clickCount >= 0) {
@@ -332,8 +413,8 @@ public class GUIAIMDriver extends Application {
 					newPlayer.setTime(totalTimeReact);
 					try {
 						FileWriter myWriter = new FileWriter("reactiontimeHS.txt", true);
-						myWriter.write("\n Username: " + newPlayer.getName() + " | " + "Time: " + newPlayer.getTime()
-								+ "MS");
+						myWriter.write(
+								"\n Username: " + newPlayer.getName() + " | " + "Time: " + newPlayer.getTime() + "MS");
 						myWriter.close();
 					} catch (IOException d) {
 						System.out.println("error");
@@ -349,10 +430,10 @@ public class GUIAIMDriver extends Application {
 			public void handle(MouseEvent e) {
 				transition.play();
 				startTrack = true;
-			if (!stopTimer) {
-			timer.scheduleAtFixedRate(task, 1000, 1000);
-			}else {
-				secondsPassed = 0;
+				if (!stopTimer) {
+					timer.scheduleAtFixedRate(task, 1000, 1000);
+				} else {
+					secondsPassed = 0;
 				}
 			}
 		};
@@ -361,38 +442,40 @@ public class GUIAIMDriver extends Application {
 
 		EventHandler<MouseEvent> circleTrack = new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent e) {
-				
+
 				if (startTrack) {
 					clickCount++;
-					
-					
+
 					trackText.setText("Your current score is " + clickCount + " | Time:" + secondsPassed);
 					trackText.setX(10);
 					trackText.setY(30);
 					trackText.setFont(buttonFont);
 					trackText.setFill(Color.WHITE);
 					System.out.println(clickCount);
-					
+
 				}
-				
-				
 
 			}
 		};
 		trackCircle.addEventFilter(MouseEvent.MOUSE_MOVED, circleTrack);
 
 		// Adding
-		vbox.getChildren().addAll(title, gridshot, tracking, reactionTime);
+		vbox.getChildren().addAll(title, gridshot, tracking, reactionTime, highScores);
 		start.getChildren().addAll(label, name, create);
 		difficulty.getChildren().addAll(diff, easy, medium, hard);
 		endScreen.getChildren().addAll(gameOverLbl, reactTryAgain);
+		hs.getChildren().addAll(hsTitle, listScores);
 
 		// Try again button
 		reactTryAgain.setOnAction(e -> {
 			stage.setScene(mainMenu);
-		
-		});
 
+		});
+		
+		highScores.setOnAction(e -> {
+			stage.setScene(hsScene);
+
+		});
 		// On button press it creates a new player
 		create.setOnAction(e -> {
 			stage.setScene(mainMenu);

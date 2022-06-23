@@ -2,6 +2,6 @@
  Username: kevin | Time: 42 Seconds | Difficulty: Hard
  Username: Mathew | Time: 32 Seconds | Difficulty: Hard
  Username: Guest | Time: 21 Seconds | Difficulty: Easy
- Username: Guest | Time: 19 Seconds | Difficulty: Easy
+ Username: Guest | Time: 43 Seconds | Difficulty: Easy
  Username: Guest | Time: 19 Seconds | Difficulty: Easy
  Username: Guest | Time: 20 Seconds | Difficulty: Medium
